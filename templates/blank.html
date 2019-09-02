@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<!-- Mirrored from www.rayanik.com/demo/modiran/admin/blank by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 28 Apr 2019 19:55:17 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<head>
+    <title>قالب مدیریتی مدیران</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="قالب مدیریت ایرانی مدیران ">
+    <meta name="keywords"
+          content="قالب مدیریت, قالب داشبورد, قالب ادمین, قالب مدیران, قالب مدیریت راستچین , قالب ایرانی مدیریت, پوسته مدیریت, قالب ادمین داشبورد سایت, قالب مدیریتی, مدیران, قالب مدیریت مدیران, پنل مدیریت, پنل مدیریت مدرن, قالب ادمین متریال, قالب مدیریت بوت استرپ, قالب ادمین بوتسترپ, قالب ادمین سایت, پوسته مدیریتی ایرانی, قالب مدیرتی مدیران ایرانی, بهترین قالب مدیریت, قالب مدیریت ریسپانسیو, قالب مدیریت ارزان, قالب admin">
+    <meta name="fontiran.com:license" content="NE29X">
+    <link rel="shortcut icon" href="../static/assets/images/favicon.png">
+
+    <!-- BEGIN CSS -->
+    <link href="../static/assets/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/bootstrap-rtl/dist/css/bootstrap-rtl.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/metisMenu/distadmin/Manage_Person/#/metisMenu.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/simple-line-icons/css/simple-line-icons.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"
+          rel="stylesheet">
+    <link href="../static/assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/paper-ripple/dist/paper-ripple.min.css" rel="stylesheet">
+    <link href="../static/assets/plugins/iCheck/skins/square/_all.css" rel="stylesheet">
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+    <link href="../static/assets/css/colors.css" rel="stylesheet">
+    <!-- END CSS -->
+    <link href="../static/assets/plugins/data-table/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../static/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="../static/jquery-1.12.4.js"></script>
+    <script src="../static/jquery-ui.js"></script>
+</head>
+
+<body class="active-ripple theme-blue fix-header sidebar-extra">
+
+
+<!-- BEGIN LOEADING -->
+<div id="loader">
+    <div class="spinner"></div>
+</div><!-- /loader -->
+<!-- END LOEADING -->
+
+<!-- BEGIN HEADER -->
+<div class="navbar navbar-fixed-top" id="main-navbar">
+    <div class="header-right">
+        <a href="/admin/" class="logo-con">
+            <img src="../static/clipart.jpeg" class="img-responsive center-block" alt="DrugCenter logo">
+        </a>
+    </div><!-- /.header-right -->
+    <div class="header-left">
+        <div class="top-bar">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="btn" id="toggle-sidebar">
+                        <span></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="btn open" id="toggle-sidebar-top">
+                        <i class="icon-user-following"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                    <a href="#" class="btn" id="toggle-fullscreen">
+                        <i class="icon-size-fullscreen"></i>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
+                        <i class="icon-envelope"></i>
+                        <span class="badge badge-primary">
+                                    1
+                                </span>
+                    </a>
+                    <ul class="dropdown-menu has-scrollbar">
+                        <li class="dropdown-header clearfix">
+                                    <span class="pull-right">
+                                        <a href="#" rel="tooltip" title="خواندن همه" data-placement="left">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                        شما 1 پیام تازه دارید.
+                                    </span>
+                        </li>
+                        <li class="dropdown-body">
+                            <ul class="dropdown-menu-list">
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <p class="clearfix">
+                                            <strong class="pull-right">
+                                                <img src="../static/assets/images/user/32.png" class="img-circle"
+                                                     alt="">
+                                                دکتر محمدی
+                                            </strong>
+                                            <small class="pull-left text-muted">
+                                                <i class="icon-clock"></i>
+                                                پانزده دقیقه پیش
+                                            </small>
+                                        </p>
+                                        <p>پیام پرمهرتان دریافت شد!</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-footer clearfix">
+                            <a href="#">
+                                <i class="icon-list fa-flip-horizontal"></i>
+                                مشاهده همه پیام ها
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
+                        <i class="icon-bell"></i>
+                        <span class="badge badge-warning">
+                                    5
+                                </span>
+                    </a>
+                    <ul class="dropdown-menu has-scrollbar">
+                        <li class="dropdown-header clearfix">
+                                    <span class="pull-right">
+                                        <a href="#" rel="tooltip" title="خواندن همه" data-placement="left">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                        <span>
+                                            شما 8 اعلان تازه دارید.
+                                        </span>
+                                    </span>
+
+                        </li>
+                        <li class="dropdown-body">
+                            <ul class="dropdown-menu-list">
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <p class="clearfix">
+                                            <strong class="pull-right">مدیر مالی</strong>
+                                            <small class="pull-left text-muted">
+                                                <i class="icon-clock"></i>
+                                                17:40
+                                            </small>
+                                        </p>
+                                        <p>درخواست فیش حقوقی</p>
+                                    </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <p class="clearfix">
+                                            <strong class="pull-right">مدیر مالی</strong>
+                                            <small class="pull-left text-muted">
+                                                <i class="icon-clock"></i>
+                                                17:40
+                                            </small>
+                                        </p>
+                                        <p>درخواست فیش حقوقی</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-footer clearfix">
+                            <a href="#">
+                                <i class="icon-list fa-flip-horizontal"></i>
+                                مشاهده همه اعلانات
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown ">
+                    <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
+                        <i class="icon-settings "></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">
+                                <i class="icon-note"></i>
+                                ویرایش پروفایل
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/User_Password">
+                                <i class="icon-key"></i>
+                                تفییر رمز عبور
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="chat.html">
+                                <span class="badge badge-primary pull-left"> 14 </span>
+                                <i class="icon-envelope"></i>
+                                تیکت های جدید
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="icon-wallet"></i>
+                                کیف پول
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/admin/logout/">
+                                <i class="icon-power"></i>
+                                خروج
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!-- /.navbar-left -->
+        </div><!-- /.top-bar -->
+    </div><!-- /.header-left -->
+</div><!-- /.navbar -->
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+    <!-- BEGIN SIDEBAR -->
+    <div id="sidebar" class="active">
+        <div class="sidebar-top">
+            <div class="user-box" style="text-align: center;">
+
+                <a href="#">
+                    <img src="../static/original0.png" alt="عکس پروفایل" class="img-circle img-responsive">
+                </a>
+            </div><!-- /.user-box -->
+            <div class="user-details" style="text-align: center;">
+                <h4>{{ user.person.Fa_FirstName }} {{ user.person.Fa_LastName }} </h4>
+                <p class="role">مدیر ارشد</p>
+            </div><!-- /.user-details -->
+
+        </div><!-- /.sidebar-top -->
+        <div class="side-menu-container">
+            <ul class="metismenu" id="side-menu">
+                {#                <li class="">#}
+                {#                    <a href="/admin/">#}
+                {#                        <i class="icon-home"></i>#}
+                {#                        <span>داشبورد</span>#}
+                {#                    </a>#}
+                {#                </li>#}
+                <li class="">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-database"></i>
+                        <span>دیتابیس</span>
+                    </a>
+                    <ul>
+                        {% if perms.auth.Manage_kashano_Read %}
+                            <li>
+                                <a href="/admin/kashano" class="">
+                                    <i class="icon-bag "></i>
+                                    <span>کاشانو</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if perms.auth.Manage_kashano_Read %}
+                            <li>
+                                <a href="/admin/divar" class="">
+                                    <i class="icon-bag "></i>
+                                                                        <span>دیوار</span>
+
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if perms.auth.Manage_kashano_Read %}
+                            <li>
+                                <a href="/admin/maplak" class="">
+                                    <i class="icon-bag "></i>
+                                                                        <span>مپلاک</span>
+
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li>
+                    {% if perms.auth.Manage_Person_Read %}
+                        <li>
+                            <a href="/admin/setting" class="">
+                                <i class="icon-settings"></i>
+                                <span>تنظیمات </span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </li>
+                <li class="">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-list   fa-flip-horizontal"></i>
+                        <span>مدیریت دسترسی</span>
+                    </a>
+                    <ul>
+                        {% if perms.auth.Manage_Role_Create %}
+                            <li>
+                                <a href="/admin/Add_Role" class="">
+                                    <i class="icon-note"></i>
+                                    <span>تعریف نقش</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if perms.auth.Manage_Role_Read %}
+                            <li>
+                                <a href="/admin/Manage_Role" class="">
+                                    <i class="fa fa-address-card-o"></i>
+                                    <span>مدیریت نقش ها</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul><!-- /#side-menu -->
+        </div><!-- /.side-menu-container -->
+    </div><!-- /#sidebar -->
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE CONTENT -->
+    <div id="page-content" style="background: #f1f3f6;">
+        {% block content %}{% endblock %}
+
+        <div class="row footer-container">
+            <div class="col-md-12">
+                <div class="copyright">
+                    <p class="pull-right">
+                        کلیه حقوق قالب مدیران محفوظ می باشد و کپی برداری از آن به هیچ عنوان جایز نیست.
+                    </p>
+                    <p class="pull-left ltr tahoma">
+                        <span>©</span>
+                        <a href="http://1style.ir/">1style</a>
+                    </p>
+                </div><!-- /.copyright -->
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+    </div><!-- /#page-content -->
+    <!-- END PAGE CONTENT -->
+
+</div><!-- /#wrapper -->
+<!-- END WRAPPER -->
+
+<!-- BEGIN CODE MODAL -->
+<div class="modal fade" id="code-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-default btn-round btn-icon pull-right" id="btn-copy"><i
+                        class="fa fa-copy"></i></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">کپی کردن کدها</h4>
+            </div>
+            <div class="modal-body"></div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
+<!-- END CODE MODAL -->
+
+<!-- BEGIN JS -->
+<script src="../static/assets/plugins/jquery-migrate/jquery-migrate-1.2.1.min.js"></script>
+<script src="../static/assets/js/holder.js"></script>
+<script src="../static/assets/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../static/assets/plugins/metisMenu/dist/metisMenu.min.js"></script>
+<script src="../static/assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script src="../static/assets/plugins/paper-ripple/dist/PaperRipple.min.js"></script>
+<script src="../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="../static/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="../static/assets/plugins/screenfull/dist/screenfull.min.js"></script>
+<script src="../static/assets/plugins/iCheck/icheck.min.js"></script>
+<script src="../static/assets/plugins/switchery/dist/switchery.js"></script>
+<script src="../static/assets/js/core.js"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="http://www.rayanik.com/demo/modiran/assets/js/html5shiv.js"></script>
+<script src="http://www.rayanik.com/demo/modiran/assets/js/respond.min.js"></script>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<!-- END JS -->
+
+<!-- BEGIN PAGE JAVASCRIPT -->
+<script src="../static/assets/plugins/chart.js/dist/Chart.bundle.min.js"></script>
+<script src="../static/assets/plugins/jquery-incremental-counter/jquery.incremental-counter.min.js"></script>
+<script src="../static/assets/plugins/ammap3/ammap/ammap.js"></script>
+<script src="../static/assets/plugins/ammap3/ammap/maps/js/iranHighFa.js"></script>
+<script src="../static/assets/js/pages/dashboard2.js"></script>
+<!-- END PAGE JAVASCRIPT -->
+
+<!-- BEGIN PAGE JAVASCRIPT -->
+<script src="../static/assets/plugins/data-table/js/jquery.dataTables.min.js"></script>
+<script src="../static/assets/plugins/data-table/js/dataTables.bootstrap.js"></script>
+<script src="../static/assets/js/pages/datatable.js"></script>
+<!-- END PAGE JAVASCRIPT -->
+
+<!-- BEGIN PAGE JAVASCRIPT -->
+<script src="../static/assets/plugins/select2/dist/js/select2.full.min.js"></script>
+<script src="../static/assets/plugins/select2/dist/js/i18n/fa.js"></script>
+<script src="../static/assets/js/pages/select2.js"></script>
+<!-- END PAGE JAVASCRIPT -->
+<!-- BEGIN PAGE JAVASCRIPT -->
+<!--<script src="../../static/assets/plugins/datepicker/jquery-ui-1.10.1.custom.min.js"></script>-->
+<!--<script src="../../static/assets/plugins/datepicker/jquery.ui.datepicker-cc.js"></script>-->
+<!--<script src="../../static/assets/plugins/datepicker/calendar.js"></script>-->
+<!--<script src="../../static/assets/plugins/datepicker/jquery.ui.datepicker-cc-fa.js"></script>-->
+<!--<script src="../../static/assets/js/pages/calendar.js"></script>-->
+<!-- END PAGE JAVASCRIPT -->
+<script>
+    $('#Rest_form').click(function () {
+        $('#form_1')[0].reset();
+        return false;
+    });
+</script>
+<script>
+    $('.Rest_form').click(function () {
+        $('#form_1')[0].reset();
+        return false;
+    });
+</script>
+
+</body>
+
+</html>

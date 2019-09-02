@@ -1,0 +1,148 @@
+{% extends "blank.html" %}
+{% block content %}
+    <div class="row">
+        <!-- BEGIN BREADCRUMB -->
+        <div class="col-md-12">
+            <div class="breadcrumb-box border shadow">
+                <ul class="breadcrumb">
+                    <li><a href="dashboard.html">پیشخوان</a></li>
+                    <li><a href="#">جدول ها</a></li>
+                    <li class="active">پلاگین Data Table</li>
+                </ul>
+                <div class="breadcrumb-left">
+                    دوشنبه، 1398/02/9 <i class="icon-calendar"></i>
+                </div><!-- /.breadcrumb-left -->
+            </div><!-- /.breadcrumb-box -->
+        </div><!-- /.col-md-12 -->
+        <div class="col-md-12">
+            <div class="portlet box border shadow">
+                <div class="portlet-heading">
+                    <div class="portlet-title">
+                        <h3 class="title" style="font-weight: bold">
+                            <i class="icon-settings"></i>
+                            تنظیمات کاشانو
+                        </h3>
+                    </div><!-- /.portlet-title -->
+                    <div class="buttons-box">
+                        <div class="code-modal hide">
+                        </div>
+                        <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                           href="#">
+                            <i class="icon-size-fullscreen"></i>
+                        </a>
+                        <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                           href="#">
+                            <i class="icon-arrow-up"></i>
+                        </a>
+                    </div><!-- /.buttons-box -->
+                </div><!-- /.portlet-heading -->
+                <div class="portlet-body" style="direction: ltr">
+                    <form action="" method="post">
+                        <input type="hidden" name="website" id="website" value="kashano">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group row">
+                                    <div class="col-sm-7">
+                                        {% for setting in settings %}
+                                            {% if setting.website == 'kashano' %}
+                                                <input type="text" style="width: 600px" id="cookie" name="cookie"
+                                                       value="{{ setting.cookie }}" class="form-control">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <label for="id_code" class="col-sm-4 col-form-label"> Cookies : <i
+                                            class="text-danger">*</i></label>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-7">
+                                        <select id="transactions" multiple name="transactions"
+                                                class="form-control select2"
+                                                style="width: 600px">
+                                            <option value="EJARE"> اجاره</option>
+                                            <option value="KHARID"> خرید</option>
+                                            <option value="PISHKHARID"> پیش خرید</option>
+                                            <option value="MOAVEZE"> معاوضعه</option>
+                                        </select>
+                                    </div>
+                                    <label for="id_enName" class="col-sm-4 col-form-label"> Transactions : <i
+                                            class="text-danger">*</i></label>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-7">
+                                        <select id="estates" multiple name="estates" class="form-control select2"
+                                                style="width: 600px">
+                                            <option value="APARTMENT"> آپارتمان</option>
+                                            <option value="EDARI"> اداری</option>
+                                            <option value="MAGHAZE"> مغازه</option>
+                                            <option value="VILA"> ویلا</option>
+                                            <option value="KOLANGI"> گلنگی</option>
+                                            <option value="ZAMIN"> زمین</option>
+                                            <option value="BAAGH"> باغ</option>
+                                            <option value="BAAGHVILA"> باغ ویلا</option>
+                                        </select>
+                                    </div>
+                                    <label for="id_faName" class="col-sm-4 col-form-label"> Estates :<i
+                                            class="text-danger">*</i></label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success"> ذخیره کردن</button>
+                    </form>
+                </div><!-- /.portlet-body -->
+            </div><!-- /.portlet -->
+        </div><!-- /.col-md-12 -->
+        <div class="col-md-12">
+            <div class="portlet box border shadow">
+                <div class="portlet-heading">
+                    <div class="portlet-title">
+                        <h3 class="title" style="font-weight: bold">
+                            <i class="icon-settings"></i>
+                            تنظیمات دیوار
+                        </h3>
+                    </div><!-- /.portlet-title -->
+                    <div class="buttons-box">
+                        <div class="code-modal hide">
+                        </div>
+                        <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                           href="#">
+                            <i class="icon-size-fullscreen"></i>
+                        </a>
+                        <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                           href="#">
+                            <i class="icon-arrow-up"></i>
+                        </a>
+                    </div><!-- /.buttons-box -->
+                </div><!-- /.portlet-heading -->
+                <div class="portlet-body">
+                </div><!-- /.portlet-body -->
+            </div><!-- /.portlet -->
+        </div><!-- /.col-md-12 -->
+    </div><!-- /.row -->
+    {% for setting in settings %}
+        {% if setting.website == 'kashano' %}
+            <input type="hidden" value="{{ setting.transactions }}" id="transaction">
+            <input type="hidden" value="{{ setting.estates }}" id="estate">
+        {% endif %}
+    {% endfor %}
+
+    <script>
+        $(document).ready(function () {
+            var transaction = $('#transaction').val();
+            var estate = $('#estate').val();
+            var tranList = [];
+            var estateList = [];
+            $.each(transaction.slice(1, -1).split(","), function (index, data) {
+                tranList.push(data.trim().slice(1, -1))
+            });
+            $.each(estate.slice(1, -1).split(","), function (index, data) {
+                estateList.push(data.trim().slice(1, -1))
+            });
+            $('#transactions').val(tranList).trigger('change');
+            $('#estates').val(estateList).trigger('change');
+        })
+    </script>
+
+
+{% endblock %}
+
