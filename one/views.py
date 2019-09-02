@@ -1,5 +1,4 @@
 import json
-import mysql.connector
 import pymongo
 import requests
 from django.contrib.admin.views.decorators import staff_member_required
