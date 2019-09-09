@@ -1,0 +1,11 @@
+Python 3.7.3
+Django 2.2.4
+install anaconda
+
+## require package
+pip install requests
+conda install -c bioconda mysqlclient
+conda install -c anaconda mysql-connector-python
+
+## Create utf-8 DB
+CREATE DATABASE <dbname> CHARACTER SET utf8;

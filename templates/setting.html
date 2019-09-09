@@ -44,12 +44,9 @@
                             <div class="col-sm-12">
                                 <div class="form-group row">
                                     <div class="col-sm-7">
-                                        {% for setting in settings %}
-                                            {% if setting.website == 'kashano' %}
-                                                <input type="text" style="width: 600px" id="cookie" name="cookie"
-                                                       value="{{ setting.cookie }}" class="form-control">
-                                            {% endif %}
-                                        {% endfor %}
+                                        <input type="text" style="width: 600px" id="cookie" name="cookie"
+                                               value="{% for setting in settings %}{{ setting.cookie }}{% endfor %}"
+                                               class="form-control">
                                     </div>
                                     <label for="id_code" class="col-sm-4 col-form-label"> Cookies : <i
                                             class="text-danger">*</i></label>
@@ -119,12 +116,10 @@
             </div><!-- /.portlet -->
         </div><!-- /.col-md-12 -->
     </div><!-- /.row -->
-    {% for setting in settings %}
-        {% if setting.website == 'kashano' %}
-            <input type="hidden" value="{{ setting.transactions }}" id="transaction">
-            <input type="hidden" value="{{ setting.estates }}" id="estate">
-        {% endif %}
-    {% endfor %}
+
+    <input type="hidden" value="{% for setting in settings %}{{ setting.transactions }}{% endfor %}" id="transaction">
+    <input type="hidden" value="{% for setting in settings %}{{ setting.estates }}{% endfor %}" id="estate">
+
 
     <script>
         $(document).ready(function () {

@@ -8,5 +8,4 @@ urlpatterns = [
     path('admin/send', views.send, name='send'),
     path('admin/get', views.get, name='get'),
     path('admin/setting', views.setting, name='setting'),
-    path('admin/notification', views.notification, name='notification'),
 ]

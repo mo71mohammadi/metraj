@@ -88,16 +88,16 @@
                             <tbody>
                             {% for record in records %}
                                 <tr>
-                                    <td>{{ record.deal_type }}</td>
-                                    <td>{{ record.est_type }}</td>
-                                    <td>{{ record.name }}</td>
-                                    <td>{{ notifi }}</td>
+                                    <td>{{ record.transaction_type_id }}</td>
+                                    <td>{{ record.estate.estate_type_id }}</td>
+                                    <td>{{ record.estate.name }}</td>
+                                    <td>{{ record.estate.name }}</td>
                                     <td style="text-align: center">
                                         <button class="edit-modal btn btn-info btn-sm" type="submit" data-toggle="modal"
                                                 data-target="#myModal" value="{{ record.elead_id }}"> ویرایش
                                         </button>
                                         <button class="send-modal btn btn-success btn-sm" type="submit"
-                                                value="{{ record.elead_id }}"> ارسال
+                                                value="{{ record.id }}"> ارسال
                                         </button>
                                         <button class="delete-modal btn btn-danger btn-sm" data-toggle="modal"
                                                 data-target="#delete_modal" value="{{ record.elead_id }}"> حذف
