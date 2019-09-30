@@ -25,6 +25,12 @@ def change_date(time):
     return time
 
 
+def home(request):
+    return render(request, 'blank.html')
+
+
+@staff_member_required()
+@login_required()
 def get(request):
     settings = model.Setting.objects.filter()
     update_count = {}
@@ -138,6 +144,8 @@ def get(request):
     return HttpResponse(json.dumps(update_count), 'application/json')
 
 
+@staff_member_required()
+@login_required()
 def get_setting(request):
     settings = model.Setting.objects.filter(name="kashano")
     if request.POST.get('website') == 'kashano':
@@ -159,6 +167,8 @@ def get_setting(request):
     return render(request, 'setting_get.html', {"settings": settings})
 
 
+@staff_member_required()
+@login_required()
 def kashano(request):
     filter_names = ('download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
     filter_clauses = [Q(**{filter: request.GET[filter]})
@@ -182,6 +192,8 @@ def obj_list(name):
     return obj_list
 
 
+@staff_member_required()
+@login_required()
 def view_record(request):
     record = model.Estate.objects.filter(id=request.GET.get('id'))
     directions = model.Direction.objects.filter(estate_id=request.GET.get('id'))
@@ -200,6 +212,8 @@ def view_record(request):
     return HttpResponse(record_list, 'application/json')
 
 
+@staff_member_required()
+@login_required()
 def delete_record(request):
     for item in request.GET.get('ids').split(','):
         print(item)
@@ -207,6 +221,8 @@ def delete_record(request):
     return HttpResponse(request.GET.getlist('ids'))
 
 
+@staff_member_required()
+@login_required()
 def export_file(request):
     print(request.GET)
     if request.GET.get('start'):
@@ -221,9 +237,11 @@ def export_file(request):
     download_status = request.GET.get('download_status')
     download_time = request.GET.get('download_time')
     if download_status:
-        record = model.Estate.objects.filter(ctime__range=[start, end], download_status=download_status, delete_status=False)
+        record = model.Estate.objects.filter(ctime__range=[start, end], download_status=download_status,
+                                             delete_status=False)
     elif download_time:
-        record = model.Estate.objects.filter(ctime__range=[start, end], download_time=download_time, delete_status=False)
+        record = model.Estate.objects.filter(ctime__range=[start, end], download_time=download_time,
+                                             delete_status=False)
     else:
         record = model.Estate.objects.filter(ctime__range=[start, end], delete_status=False)
     record_list = serializers.serialize('json', record)

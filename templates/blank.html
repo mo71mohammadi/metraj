@@ -50,7 +50,7 @@
 <div class="navbar navbar-fixed-top" id="main-navbar">
     <div class="header-right">
         <a href="/admin/" class="logo-con">
-            <img src="../../static/clipart.jpeg" class="img-responsive center-block" alt="DrugCenter logo">
+            <img src="../../static/clipart.jpeg" class="img-responsive center-block" alt="Metraj logo">
         </a>
     </div><!-- /.header-right -->
     <div class="header-left">
@@ -73,105 +73,6 @@
                         <i class="icon-size-fullscreen"></i>
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
-                        <i class="icon-envelope"></i>
-                        <span class="badge badge-primary">
-                                    1
-                                </span>
-                    </a>
-                    <ul class="dropdown-menu has-scrollbar">
-                        <li class="dropdown-header clearfix">
-                                    <span class="pull-right">
-                                        <a href="#" rel="tooltip" title="خواندن همه" data-placement="left">
-                                            <i class="icon-eye"></i>
-                                        </a>
-                                        شما 1 پیام تازه دارید.
-                                    </span>
-                        </li>
-                        <li class="dropdown-body">
-                            <ul class="dropdown-menu-list">
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <p class="clearfix">
-                                            <strong class="pull-right">
-                                                <img src="../static/assets/images/user/32.png" class="img-circle"
-                                                     alt="">
-                                                دکتر محمدی
-                                            </strong>
-                                            <small class="pull-left text-muted">
-                                                <i class="icon-clock"></i>
-                                                پانزده دقیقه پیش
-                                            </small>
-                                        </p>
-                                        <p>پیام پرمهرتان دریافت شد!</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-footer clearfix">
-                            <a href="#">
-                                <i class="icon-list fa-flip-horizontal"></i>
-                                مشاهده همه پیام ها
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
-                        <i class="icon-bell"></i>
-                        <span class="badge badge-warning">
-                                    5
-                                </span>
-                    </a>
-                    <ul class="dropdown-menu has-scrollbar">
-                        <li class="dropdown-header clearfix">
-                                    <span class="pull-right">
-                                        <a href="#" rel="tooltip" title="خواندن همه" data-placement="left">
-                                            <i class="icon-eye"></i>
-                                        </a>
-                                        <span>
-                                            شما 8 اعلان تازه دارید.
-                                        </span>
-                                    </span>
-
-                        </li>
-                        <li class="dropdown-body">
-                            <ul class="dropdown-menu-list">
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <p class="clearfix">
-                                            <strong class="pull-right">مدیر مالی</strong>
-                                            <small class="pull-left text-muted">
-                                                <i class="icon-clock"></i>
-                                                17:40
-                                            </small>
-                                        </p>
-                                        <p>درخواست فیش حقوقی</p>
-                                    </a>
-                                </li>
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <p class="clearfix">
-                                            <strong class="pull-right">مدیر مالی</strong>
-                                            <small class="pull-left text-muted">
-                                                <i class="icon-clock"></i>
-                                                17:40
-                                            </small>
-                                        </p>
-                                        <p>درخواست فیش حقوقی</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-footer clearfix">
-                            <a href="#">
-                                <i class="icon-list fa-flip-horizontal"></i>
-                                مشاهده همه اعلانات
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="dropdown ">
                     <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
                         <i class="icon-settings "></i>
@@ -179,28 +80,6 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#">
-                                <i class="icon-note"></i>
-                                ویرایش پروفایل
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/User_Password">
-                                <i class="icon-key"></i>
-                                تفییر رمز عبور
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="chat.html">
-                                <span class="badge badge-primary pull-left"> 14 </span>
-                                <i class="icon-envelope"></i>
-                                تیکت های جدید
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="icon-wallet"></i>
-                                کیف پول
                             </a>
                         </li>
                         <li class="divider"></li>
@@ -232,102 +111,64 @@
             </div><!-- /.user-box -->
             <div class="user-details" style="text-align: center;">
                 <h4>{{ user.person.Fa_FirstName }} {{ user.person.Fa_LastName }} </h4>
-                <p class="role">مدیر ارشد</p>
+                <p class="role"></p>
             </div><!-- /.user-details -->
 
         </div><!-- /.sidebar-top -->
         <div class="side-menu-container">
             <ul class="metismenu" id="side-menu">
-                {#                <li class="">#}
-                {#                    <a href="/admin/">#}
-                {#                        <i class="icon-home"></i>#}
-                {#                        <span>داشبورد</span>#}
-                {#                    </a>#}
-                {#                </li>#}
                 <li class="">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-database"></i>
-                        <span>دیتابیس</span>
+                        <i class="icon-settings"></i>
+                        <span>مدیریت کاشانو</span>
                     </a>
                     <ul>
-                        {% if perms.auth.Manage_kashano_Read %}
-                            <li>
-                                <a href="/admin/kashano" class="">
-                                    <i class="icon-bag "></i>
-                                    <span>کاشانو</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if perms.auth.Manage_kashano_Read %}
-                            <li>
-                                <a href="/admin/divar" class="">
-                                    <i class="icon-bag "></i>
-                                    <span>دیوار</span>
+                        <li>
+                            <a href="/kashano/get" class="">
+                                <i class="icon-bag "></i>
+                                <span>دریافت</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/kashano" class="">
+                                <i class="icon-bag "></i>
+                                <span>لیست آگهی</span>
 
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if perms.auth.Manage_kashano_Read %}
-                            <li>
-                                <a href="/admin/maplak" class="">
-                                    <i class="icon-bag "></i>
-                                    <span>مپلاک</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/kashano/setting" class="">
+                                <i class="icon-bag "></i>
+                                <span>تنظیمات</span>
 
-                                </a>
-                            </li>
-                        {% endif %}
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li>
-                    {% if perms.auth.Manage_Person_Read %}
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-settings"></i>
-                            <span>تنظیمات </span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="/admin/kashano/setting_get">
-                                    <i class="icon-settings"></i>
-                                    <span>تنظیمات دریافت </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin/kashano/setting_metraj">
-                                    <i class="icon-settings"></i>
-                                    <span>تنظیمات مثراژ </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/admin/kashano/setting_kashano">
-                                    <i class="icon-settings"></i>
-                                    <span>تنظیمات کاشانو </span>
-                                </a>
-                            </li>
-                        </ul>
-                    {% endif %}
-                </li>
-                <li class="">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-list   fa-flip-horizontal"></i>
-                        <span>مدیریت دسترسی</span>
+                        <i class="icon-settings"></i>
+                        <span>مدیریت مپلاک </span>
                     </a>
                     <ul>
-                        {% if perms.auth.Manage_Role_Create %}
-                            <li>
-                                <a href="/admin/Add_Role" class="">
-                                    <i class="icon-note"></i>
-                                    <span>تعریف نقش</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if perms.auth.Manage_Role_Read %}
-                            <li>
-                                <a href="/admin/Manage_Role" class="">
-                                    <i class="fa fa-address-card-o"></i>
-                                    <span>مدیریت نقش ها</span>
-                                </a>
-                            </li>
-                        {% endif %}
+                        <li>
+                            <a href="/admin/kashano/setting_get">
+                                <i class="icon-settings"></i>
+                                <span>دریافت آگهی </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/kashano/setting_metraj">
+                                <i class="icon-settings"></i>
+                                <span>لیست آگهی </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/kashano/setting_kashano">
+                                <i class="icon-settings"></i>
+                                <span>تنظیمات </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul><!-- /#side-menu -->
@@ -426,12 +267,20 @@
         $('#form_1')[0].reset();
         return false;
     });
+
+
+
+
 </script>
 <script>
     $('.Rest_form').click(function () {
         $('#form_1')[0].reset();
         return false;
     });
+
+
+
+
 </script>
 
 </body>
