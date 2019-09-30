@@ -15,16 +15,16 @@
 <!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano?delete_status=True"> حذف شده-->
 <!--                ها </a>-->
             <a class="btn btn-info m-b-5 m-r-2" data-toggle="modal"
-               data-target="#export" style="margin-bottom: 7px;margin-right: 473px" href=""> خروجی </a>
+               data-target="#export" style="margin-bottom: 7px;float: left" href=""> خروجی </a>
         </div>
     </div>
     <div class="col-md-12">
-        <div class="portlet box border shadow">
+        <div class="portlet box border shadow" >
             <div class="portlet-heading">
                 <div class="portlet-title">
                     <h3 class="title" style="font-weight: bold">
                         <i class="icon-settings"></i>
-                        مدیریت Generic
+                        مدیریت کاشانو
                     </h3>
                 </div><!-- /.portlet-title -->
                 <div class="buttons-box">
@@ -71,11 +71,11 @@
                             <td>{{ record.area }}</td>
                             <td>{{ record.est_address }}</td>
                             <td style="text-align: center">
-                                <a class="edit-modal btn btn-info btn-sm" href="kashano/view?id={{ record.id }}"
+                                <a class="edit-modal btn btn-info btn-sm" href="/kashano/view?id={{ record.id }}"
                                    type="submit" value="{{ record.id }}">نمایش
                                 </a>
                                 <a class="send-modal btn btn-success btn-sm"
-                                   href="admin/kashano/estate/{{ record.id }}/change/" type="submit"> ویرایش</a>
+                                   href="/admin/kashano/estate/{{ record.id }}/change/" type="submit"> ویرایش</a>
                                 {% if record.delete_status == False %}
                                 <button class="delete-modal btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#delete_modal" value="{{ record.id }}">حذف
@@ -275,8 +275,9 @@
                                 <div class="col-sm-8">
                                     <select name="area_id" class="form-control select2 allow-cancel" id="area_id"
                                             style="width: 200px">
-                                        <option value="False"> دانلود نشده</option>
-
+                                        {% for area in areas%}
+                                        <option value="{{area.area_id}}">{{area.text}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>

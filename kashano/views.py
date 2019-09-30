@@ -25,6 +25,8 @@ def change_date(time):
     return time
 
 
+@staff_member_required()
+@login_required()
 def home(request):
     return render(request, 'blank.html')
 
@@ -179,10 +181,10 @@ def kashano(request):
     else:
         records = model.Estate.objects.filter()
     download_times = model.Estate.objects.values('download_time').distinct()
-    print(download_times)
+    areas = model.Area.objects.filter()
     # paginator = Paginator(records, 100)
     # records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times})
+    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": areas})
 
 
 def obj_list(name):

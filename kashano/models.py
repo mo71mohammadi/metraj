@@ -130,3 +130,8 @@ class Setting(models.Model):
     cookie = models.CharField(max_length=500, null=True, blank=True)
     transactions = models.CharField(max_length=500, null=True, blank=True)
     estates = models.CharField(max_length=500, null=True, blank=True)
+
+
+class Area(models.Model):
+    area_id = models.CharField(unique=True, max_length=30, blank=True, null=True)
+    text = models.CharField(max_length=300, blank=True, null=True)

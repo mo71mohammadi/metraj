@@ -141,5 +141,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+# LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/kashano/'
 STATIC_URL = '/static/'
