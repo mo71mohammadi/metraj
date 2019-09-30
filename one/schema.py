@@ -2,16 +2,30 @@ import re
 
 from one import models
 
+Equipments = models.EquipmentKashano.objects.filter()
+Documents = models.DocumentKashano.objects.filter()
+Transactions = models.TransactionKashano.objects.filter()
+Habitations = models.HabitationKashano.objects.filter()
+Directions = models.DirectionKashano.objects.filter()
+Estates = models.EstateKashano.objects.filter()
+
 
 def SQL(record, action):
-    estTypeL = [
-        ('MAGHAZE', 1), ('EDARI', 2), ('ZAMIN', 3), ('KOLANGI', 4), ('VILA', 5), ('BAAGHVILA', 5), ('APARTMENT', 6),
-        ('BAAGH', 8)
-    ]
-    estType = None
-    for est in estTypeL:
-        if est[0] == record['est_type']:
-            estType = est[1]
+    # estTypeL = [
+    #     ('MAGHAZE', 1), ('EDARI', 2), ('ZAMIN', 3), ('KOLANGI', 4), ('VILA', 5), ('BAAGHVILA', 5), ('APARTMENT', 6),
+    #     ('BAAGH', 8)
+    # ]
+    estateDic = {}
+    for Estate in Estates:
+        estateDic[Estate.value] = Estate.metraj.value
+    if record['est_type'] in estateDic:
+        estType = estateDic[record['est_type']]
+    else:
+        estType = estateDic['None']
+    # estType = None
+    # for est in estTypeL:
+    #     if est[0] == record['est_type']:
+    #         estType = est[1]
 
     rePhone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', record['phone'])
     rePhone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', record['phone2'])
@@ -20,7 +34,7 @@ def SQL(record, action):
         phone = record['phone2']
     elif rePhone2:
         mobile = rePhone2[0]
-        phone = record['phone2']
+        phone = record['phone']
     else:
         mobile = ''
         phone = ''
@@ -28,59 +42,88 @@ def SQL(record, action):
     if record['age']:
         age = int(record['age'])
     else:
-        age = ''
+        age = None
 
     if record['addr_latitude'] and record['addr_longitude']:
         map = record['addr_latitude'] + ', ' + record['addr_longitude']
     else:
         map = ''
 
+    directionDic = {}
+    for Direction in Directions:
+        directionDic[Direction.value] = Direction.metraj.value
     directionL = []
     for direct in record['direction']:
-        if direct == 'SHOMALI':
-            directionL.append(1)
-        elif direct == 'SHARGHI':
-            directionL.append(2)
-        elif direct == 'JONOOBI':
-            directionL.append(3)
-        elif direct == 'GHARBI':
-            directionL.append(4)
-    if record['fill_stat'] == 'TAKHLIE':
-        habitation = 0
-    elif record['fill_stat'] == 'MALEKSAKEN':
-        habitation = 1
-    elif record['fill_stat'] == 'EJARE':
-        habitation = 2
-    else:
-        habitation = ''
+        if direct in directionDic:
+            directionL.append(directionDic[direct])
+        else:
+            directionL.append(directionDic['None'])
+        # if direct == 'SHOMALI':
+        #     directionL.append(1)
+        # elif direct == 'SHARGHI':
+        #     directionL.append(2)
+        # elif direct == 'JONOOBI':
+        #     directionL.append(3)
+        # elif direct == 'GHARBI':
+        #     directionL.append(4)
 
-    if record['sanad_stat'] == 'SHAKHSI':
-        document = 2
-    elif record['sanad_stat'] == 'TEJARI':
-        document = 3
-    elif record['sanad_stat'] == 'EDARI':
-        document = 4
-    elif record['sanad_stat'] == 'GHOLNAMEI':
-        document = 5
-    elif record['sanad_stat'] == 'TAVONI':
-        document = 6
-    elif record['sanad_stat'] == 'OGHAFI':
-        document = 7
-    elif record['sanad_stat'] == 'BONYADI':
-        document = 8
-    elif record['sanad_stat'] == 'MOSHA':
-        document = 9
-    elif record['sanad_stat'] == 'DARDASTEGHDAM':
-        document = 10
+    habitationDic = {}
+    for Habitation in Habitations:
+        habitationDic[Habitation.value] = Habitation.metraj.value
+    if record['fill_stat'] in habitationDic:
+        habitation = habitationDic[record['fill_stat']]
     else:
-        document = 1
+        habitation = habitationDic['None']
+    # if record['fill_stat'] == 'TAKHLIE':
+    #     habitation = 0
+    # elif record['fill_stat'] == 'MALEKSAKEN':
+    #     habitation = 1
+    # elif record['fill_stat'] == 'EJARE':
+    #     habitation = 2
+    # else:
+    #     habitation = ''
 
-    if record['deal_type'] == 'EJARE':
-        transaction = 1
-    elif record['deal_type'] == 'KHARID':
-        transaction = 2
+    documentDic = {}
+    for Document in Documents:
+        documentDic[Document.value] = Document.metraj.value
+    if record['sanad_stat'] in documentDic:
+        document = documentDic[record['sanad_stat']]
+    else:
+        document = documentDic['None']
+    # if record['sanad_stat'] == 'SHAKHSI':
+    #     document = 2
+    # elif record['sanad_stat'] == 'TEJARI':
+    #     document = 3
+    # elif record['sanad_stat'] == 'EDARI':
+    #     document = 4
+    # elif record['sanad_stat'] == 'GHOLNAMEI':
+    #     document = 5
+    # elif record['sanad_stat'] == 'TAVONI':
+    #     document = 6
+    # elif record['sanad_stat'] == 'OGHAFI':
+    #     document = 7
+    # elif record['sanad_stat'] == 'BONYADI':
+    #     document = 8
+    # elif record['sanad_stat'] == 'MOSHA':
+    #     document = 9
+    # elif record['sanad_stat'] == 'DARDASTEGHDAM':
+    #     document = 10
+    # else:
+    #     document = 1
+
+    TransactionDic = {}
+    for Transaction in Transactions:
+        TransactionDic[Transaction.value] = Transaction.metraj.value
+    if record['deal_type'] in TransactionDic:
+        transaction = TransactionDic[record['deal_type']]
     else:
         transaction = record['deal_type']
+    # if record['deal_type'] == 'EJARE':
+    #     transaction = 1
+    # elif record['deal_type'] == 'KHARID':
+    #     transaction = 2
+    # else:
+    #     transaction = record['deal_type']
 
     equipments = []
     for facilitie in record['facilities']:
@@ -95,6 +138,9 @@ def SQL(record, action):
         "BARGH":62, "IPHONE":64, "ANBARI":67, "HOME_SERAIDAR":68, "SERAIDAR":68, "SONA":69, "CHAKOZI":70, "PARKING":71,
         "BALKON":72, "ESTAKHR":73,
     }
+    for Equipment in Equipments:
+        equipmentDict[Equipment.value] = Equipment.metraj.value
+
     if action == 1:
         estate = models.Estate(
             user_id=None, data_id=record['elead_id'], estate_type_id=estType, installation=None,
@@ -112,7 +158,6 @@ def SQL(record, action):
         estate.save()
         for obj in equipments:
             if obj in equipmentDict:
-                print(equipmentDict[obj])
                 equipment = models.Equipment.objects.get(number=equipmentDict[obj])
                 estate.equipments.add(equipment)
         advertisement = models.Advertisement(

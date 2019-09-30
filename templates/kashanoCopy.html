@@ -1,0 +1,699 @@
+{% extends "blank.html" %}
+{% block content %}
+
+<div class="row">
+    <!-- BEGIN BREADCRUMB -->
+    <div class="col-md-12">
+        <div class="breadcrumb-box border shadow">
+            <ul class="breadcrumb">
+                <li><a href="dashboard.html">پیشخوان</a></li>
+                <li><a href="#">جدول ها</a></li>
+                <li class="active">پلاگین Data Table</li>
+            </ul>
+            <div class="breadcrumb-left">
+                دوشنبه، 1398/02/9 <i class="icon-calendar"></i>
+            </div><!-- /.breadcrumb-left -->
+        </div><!-- /.breadcrumb-box -->
+    </div><!-- /.col-md-12 -->
+    <!-- END BREADCRUMB -->
+    <div class="col-sm-12">
+        <div class="column">
+            {% if perms.auth.Manage_Generic_Create %}
+            <button class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" id="update" data-toggle="modal"
+                    data-target="#update_modal"><i class="fa fa-plus"> </i> بروزرسانی
+            </button>
+            {% endif %}
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success fade in">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        {{ message }}!
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i class="icon-check"></i>
+                    <strong>تبریک!</strong>
+                    عملیات موردنظر شما با موفقیت انجام شد.
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+        <div class="portlet box border shadow">
+            <div class="portlet-heading">
+                <div class="portlet-title">
+                    <h3 class="title" style="font-weight: bold">
+                        <i class="icon-settings"></i>
+                        مدیریت Generic
+                    </h3>
+                </div><!-- /.portlet-title -->
+                <div class="buttons-box">
+                    <div class="code-modal hide">
+                    </div>
+                    <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                       href="#">
+                        <i class="icon-size-fullscreen"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                       href="#">
+                        <i class="icon-arrow-up"></i>
+                    </a>
+                </div><!-- /.buttons-box -->
+            </div><!-- /.portlet-heading -->
+            <div class="portlet-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped" id="data-table">
+                        <thead>
+                        <tr>
+                            <th class="th-sm" style="text-align: center">Transaction
+                            </th>
+                            <th class="th-sm" style="text-align: center">Estate
+                            </th>
+                            <th class="th-sm" style="text-align: center">EnName
+                            </th>
+                            <th class="th-sm" style="text-align: center">FaName
+                            </th>
+                            {% if perms.auth.Manage_Generic_Update or perms.auth.Manage_Generic_Delete %}
+                            <th class="th-sm" style="width: 160px; text-align: center">Action
+                            </th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.transaction_type_id }}</td>
+                            <td>{{ record.estate.estate_type_id }}</td>
+                            <td>{{ record.estate.name }}</td>
+                            <td>{{ record.estate.name }}</td>
+                            <td style="text-align: center">
+                                <button class="edit-modal btn btn-info btn-sm" type="submit" data-toggle="modal"
+                                        data-target="#myModal" value="{{ record.elead_id }}"> ویرایش
+                                </button>
+                                <button class="send-modal btn btn-success btn-sm" type="submit"
+                                        value="{{ record.id }}"> ارسال
+                                </button>
+                                <button class="delete-modal btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#delete_modal" value="{{ record.elead_id }}"> حذف
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if records.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ records.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ Generics.number }} of {{ Generics.paginator.num_pages }}.
+                            </span>
+
+                            {% if records.has_next %}
+                                <a href="?page={{ records.next_page_number }}">next</a>
+                                <a href="?page={{ records.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div><!-- /.table-responsive -->
+            </div><!-- /.portlet-body -->
+        </div><!-- /.portlet -->
+    </div><!-- /.col-md-12 -->
+
+</div><!-- /.row -->
+<div class="modal " id="myModal">
+    <div class="modal-dialog modal-lg" style="max-width: 100%;">
+        <form action="" method="post" class="metaaa" id="form_1">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header" id="Header_1">Update ATC Code</div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="id_code" class="col-sm-4 col-form-label"> GenericCode <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_code" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_enName" class="col-sm-4 col-form-label"> EnName <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_enName" name="enName" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_faName" class="col-sm-4 col-form-label"> FaName <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_faName" name="faName" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_strength" class="col-sm-4 col-form-label"> Strength <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_strength" name="strength" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_measure" class="col-sm-4 col-form-label"> Measure <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_measure" name="measure" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_volume" class="col-sm-4 col-form-label"> Volume <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_volume" name="volume" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_dose" class="col-sm-4 col-form-label"> Dose <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_dose" name="dose" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_enForm" class="col-sm-4 col-form-label"> EnForm <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_enForm" name="enForm" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_faForm" class="col-sm-4 col-form-label"> FaForm <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_faForm" name="faForm" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="id_route" class="col-sm-4 col-form-label"> RouteOfAdmin <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_route" name="route" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+                                        {% for route in Route %}
+                                        <option value="{{ route.id }}">{{ route.EnName }} {{ route.EnRoute }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc" class="col-sm-4 col-form-label"> ATC <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="id_atc" name="atc" class="form-control"
+                                           style="direction: ltr;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc0" class="col-sm-4 col-form-label"> ATC L1 <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_atc0" name="atc0" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+                                        {% for name in atc0 %}
+                                        <option value="{{ name.id }}">{{ name.Name }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc1" class="col-sm-4 col-form-label"> ATC L2 <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_atc1" name="atc1" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc2" class="col-sm-4 col-form-label"> ATC L3 <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_atc2" name="atc2" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc3" class="col-sm-4 col-form-label"> ATC L4 <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_atc3" name="atc3" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_atc4" class="col-sm-4 col-form-label"> ATC L5 <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_atc4" name="atc4" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+                                        {% for name in atc4 %}
+                                        <option value="{{ name.id }}">{{ name.Name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_ddd" class="col-sm-4 col-form-label"> DDD <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <select id="id_ddd" name="ddd" class="form-control select2 allow-cancel"
+                                            style="width: 600px">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="id_edl" class="col-sm-4 col-form-label"> Essential <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="checkbox" id="id_edl" name="edl" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="Rest_form">Rest</button>
+                    <button type="submit" class="btn btn-success" id="submit_form_1">Add</button>
+                    <button type="button" class="btn btn-danger" id="modal_dis" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal" id="delete_modal">
+    <div class="modal-dialog">
+        <form action="" method="post" id="form_2">
+            {% csrf_token %}
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="title" style="font-weight: bold">
+                        <i class="icon-frane"></i>
+                        حذف Generic
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p style="margin-bottom: 0">شما در حال حذف اطلاعات جاری هستید . آیا ادامه میدهید ؟</p>
+                    <input id="delete_item" type="hidden" name="delete" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            style="width: 60px; font-weight: bold">خیر
+                    </button>
+
+                    <button type="submit" class="btn btn-danger" id="submit_form_2"
+                            style="width: 60px; font-weight: bold">حذف
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal" id="update_modal">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="title" style="font-weight: bold">
+                    <i class="icon-frane"></i>
+                    بروزرسانی
+                </p>
+            </div>
+            <div class="modal-body">
+                <p id="updateP" style="margin-bottom: 0"> در حال بروزرسانی .......... </p>
+            </div>
+            <div class="modal-footer">
+                <form action="" method="get">
+                    <input type="hidden" id="updateInput" value="تایید" class="btn btn-success"
+                           style="width: 60px; font-weight: bold">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--# Update Form #-->
+<script>
+        $(document).ready(function () {
+            $('#data-table').on('click', '.edit-modal', function () {
+                var ID = $(this).val();
+                $.ajax({
+                    url: "/admin/kashano",
+                    async: false,
+                    dataType: 'json',
+                    type: 'GET',
+                    data: {'item': ID},
+                    success: function (data) {
+                        var suggestion = [];
+                        $.each(data, function (index, Generic) {
+                            $('#id_atc0').val(Generic.atc0).trigger('change');
+                            if ($('#id_atc1').find("option[value='" + Generic.atc1_id + "']").length) {
+                                $('#id_atc1').val(Generic.atc1_id).trigger('change');
+                            } else {
+                                var newOption = new Option(Generic.atc1_Name, Generic.atc1_id, false, false);
+                                $('#id_atc1').append(newOption).trigger('change');
+                                $('#id_atc1').val(Generic.atc1_id).trigger('change');
+                            }
+                            if ($('#id_atc3').find("option[value='" + Generic.atc3_id + "']").length) {
+                                $('#id_atc3').val(Generic.atc3_id).trigger('change');
+                            } else {
+                                var newOption = new Option(Generic.atc3_Name, Generic.atc3_id, false, false);
+                                $('#id_atc3').append(newOption).trigger('change');
+                                $('#id_atc3').val(Generic.atc3_id).trigger('change');
+                            }
+                            if ($('#id_atc2').find("option[value='" + Generic.atc2_id + "']").length) {
+                                $('#id_atc2').val(Generic.atc2_id).trigger('change');
+                            } else {
+                                var newOption = new Option(Generic.atc2_Name, Generic.atc2_id, false, false);
+                                $('#id_atc2').append(newOption).trigger('change');
+                                $('#id_atc2').val(Generic.atc2_id).trigger('change');
+                            }
+                            if ($('#id_atc4').find("option[value='" + Generic.atc4_id + "']").length) {
+                                $('#id_atc4').val(Generic.atc4_id).trigger('change');
+                            } else {
+                                var newOption = new Option(Generic.atc4_Name, Generic.atc4_id, false, false);
+                                $('#id_atc4').append(newOption).trigger('change');
+                                $('#id_atc4').val(Generic.atc4_id).trigger('change');
+                            }
+                            if ($('#id_ddd').find("option[value='" + Generic.ddd_id + "']").length) {
+                                $('#id_ddd').val(Generic.ddd_id).trigger('change');
+                            } else {
+                                var newOption = new Option(Generic.ddd_Name, Generic.ddd_id, false, false);
+                                $('#id_ddd').append(newOption).trigger('change');
+                                $('#id_ddd').val(Generic.ddd_id).trigger('change');
+                            }
+                            $('#id_route').val(Generic.route).trigger('change');
+                            $('#id_code').val(Generic.Code);
+                            $('#id_enName').val(Generic.EnGeneric);
+                            $('#id_faName').val(Generic.FaGeneric);
+                            $('#id_strength').val(Generic.Strength);
+                            $('#id_measure').val(Generic.Measure);
+                            $('#id_volume').val(Generic.Volume);
+                            $('#id_dose').val(Generic.Dose);
+                            $('#id_enForm').val(Generic.EnForm);
+                            $('#id_faForm').val(Generic.FaForm);
+                            $('#id_atc').val(Generic.ATC);
+                            $('#id_edl').prop("checked", Generic.Essential);
+                            $('#submit_form_1').html('Update')
+                            $('#Header_1').html('Update Generic')
+                            $('#Rest_form').hide()
+                            $.get("/admin/Generic_Manage", {
+                                session: 'on',
+                                Action: 'update',
+                                Value: Generic.id,
+                                Generic_SELECT: Generic.route
+                            });
+                        });
+                        add(suggestion);
+                    },
+                    error: function (err) {
+                        alert("error")
+                    },
+                });
+
+            });
+
+            $('#Rest_form').click(function () {
+                $('#form_1')[0].reset();
+                return false;
+            });
+            $('#Generic_Add').click(function () {
+                $('#submit_form_1').html('Add')
+                $('#Header_1').html('Add Generic')
+                $('#Rest_form').show()
+                $.get("/admin/Generic_Manage", {session: 'on', Action: 'create'});
+                $('#form_1')[0].reset();
+            });
+        })
+
+</script>
+<script>
+        $(document).ready(function () {
+            $(".select2").select2({
+                dropdownParent: $("#myModal")
+            });
+        });
+
+</script>
+
+<!--#Dynamic autocomplete-->
+<script>
+        $(function () {
+            var availableTags = [
+                "ActionScript",
+                "AppleScript",
+                "Asp",
+            ];
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $("#id_route")
+                .on("keydown", function (event) {
+                    if (event.keyCode === $.ui.keyCode.TAB &&
+                        $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                    minLength: 0,
+                    source: function (req, add) {
+                        search = this.element.val();
+                        $.ajax({
+                            url: "/api/get_drugs/",
+                            async: false,
+                            dataType: 'json',
+                            type: 'GET',
+                            data: {'RouteAdmin_id': search},
+                            success: function (data) {
+                                var suggestion = [];
+                                $.each(data, function (index, drug) {
+                                    suggestion.push(drug)
+                                });
+                                add(suggestion);
+                            },
+                            error: function (err) {
+                                alert("error")
+                            },
+                        });
+                    },
+                    focus: function () {
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $('#id_route').val(ui.item.value)
+                        $.get("/admin/Generic_Manage", {session: 'on', Generic_SELECT: ui.item.id});
+                        return false;
+                    }
+                });
+        });
+
+
+
+</script>
+
+<!--# delete modal #-->
+<script>
+        $(document).ready(function () {
+            $('#data-table').on('click', '.delete-modal', function () {
+                var ID = $(this).val();
+                $.get("/admin/Generic_Manage", {session: 'on', Action: 'delete', Value: ID});
+                $('#delete_item').val(ID)
+            })
+        })
+
+</script>
+
+<!--# update modal #-->
+<script>
+        $(document).ready(function () {
+            $('#update').on('click', function () {
+                $.get("/admin/get", {refresh: 'kashano'}, function (data) {
+                    $("#updateP").text(data);
+                    $("#updateInput").attr('type', 'submit');
+                });
+            })
+        })
+
+</script>
+
+<!--# send modal #-->
+<script>
+        $(document).ready(function () {
+            $('#data-table').on('click', '.send-modal', function () {
+                var ID = $(this).val();
+                $.get("/admin/send", {type: 'kashano', Value: ID});
+                $('#delete_item').val(ID)
+            })
+        })
+
+</script>
+
+<script>
+        $(document).ready(function () {
+            $('#Rest_form').on('click', function () {
+                $('.select2').val(null).trigger('change');
+            })
+            $('#AdmRoute_Add').on('click', function () {
+                $('.select2').val(null).trigger('change');
+            })
+            $('#id_atc0').on("select2:select", function (e) {
+                $.get("/admin/Generic_Manage", {session: 'atc', atc0_SELECT: $('#id_atc0').val()}, function (data) {
+                    $('#id_atc1').html('');
+                    $.each(data, function (index, item) {
+                        if ($('#id_atc1').find("option[value='" + item.id + "']").length) {
+
+                        } else {
+                            var newOption = new Option(item.Name, item.id, false, false);
+                            $('#id_atc1').append(newOption).trigger('change');
+
+                        }
+                    })
+                    $('#id_atc1').val(null).trigger('change');
+                    $('#id_atc2').val(null).trigger('change');
+                    $('#id_atc3').val(null).trigger('change');
+                    $('#id_atc4').val(null).trigger('change');
+                    $('#id_ddd').val(null).trigger('change');
+                });
+            });
+            $('#id_atc1').on("select2:select", function (e) {
+                $.get("/admin/RouteAdmin_Manage", {session: 'atc', atc1_SELECT: $('#id_atc1').val()}, function (data) {
+                    $('#id_atc2').html('');
+                    $.each(data, function (index, item) {
+                        if ($('#id_atc2').find("option[value='" + item.id + "']").length) {
+
+                        } else {
+                            var newOption = new Option(item.Name, item.id, false, false);
+                            $('#id_atc2').append(newOption).trigger('change');
+
+                        }
+                    })
+                    $('#id_atc2').val(null).trigger('change');
+                    $('#id_atc3').val(null).trigger('change');
+                    $('#id_atc4').val(null).trigger('change');
+                    $('#id_ddd').val(null).trigger('change');
+                });
+            });
+            $('#id_atc2').on("select2:select", function (e) {
+                $.get("/admin/RouteAdmin_Manage", {session: 'atc', atc2_SELECT: $('#id_atc2').val()}, function (data) {
+                    $('#id_atc3').html('');
+                    $.each(data, function (index, item) {
+                        if ($('#id_atc3').find("option[value='" + item.id + "']").length) {
+
+                        } else {
+                            var newOption = new Option(item.Name, item.id, false, false);
+                            $('#id_atc3').append(newOption).trigger('change');
+
+                        }
+                    })
+                    $('#id_atc3').val(null).trigger('change');
+                    $('#id_atc4').val(null).trigger('change');
+                    $('#id_ddd').val(null).trigger('change');
+                });
+            });
+            $('#id_atc3').on("select2:select", function (e) {
+                $.get("/admin/RouteAdmin_Manage", {session: 'atc', atc3_SELECT: $('#id_atc3').val()}, function (data) {
+                    $('#id_atc4').html('');
+                    $.each(data, function (index, item) {
+                        if ($('#id_atc4').find("option[value='" + item.id + "']").length) {
+
+                        } else {
+                            var newOption = new Option(item.Name, item.id, false, false);
+                            $('#id_atc4').append(newOption).trigger('change');
+
+                        }
+                    })
+                    $('#id_atc4').val(null).trigger('change');
+                    $('#id_ddd').val(null).trigger('change');
+                });
+            });
+            $('#id_atc4').on("select2:select", function (e) {
+                $.get("/admin/RouteAdmin_Manage", {session: 'atc', atc4_SELECT: $('#id_atc4').val()}, function (data) {
+                    if ($('#id_atc0').find("option[value='" + data[0].atc_0_id + "']").length) {
+                        $('#id_atc0').val(data[0].atc_0_id).trigger('change');
+                    } else {
+                        var newOption = new Option(data[0].atc_0_Name, data[0].atc_0_id, false, false);
+                        $('#id_atc0').append(newOption).trigger('change');
+                        $('#id_atc0').val(data[0].atc_0_id).trigger('change');
+                    }
+                    if ($('#id_atc1').find("option[value='" + data[0].atc_1_id + "']").length) {
+                        $('#id_atc1').val(data[0].atc_1_id).trigger('change');
+                    } else {
+                        var newOption = new Option(data[0].atc_1_Name, data[0].atc_1_id, false, false);
+                        $('#id_atc1').append(newOption).trigger('change');
+                        $('#id_atc1').val(data[0].atc_1_id).trigger('change');
+                    }
+                    if ($('#id_atc2').find("option[value='" + data[0].atc_2_id + "']").length) {
+                        $('#id_atc2').val(data[0].atc_2_id).trigger('change');
+                    } else {
+                        var newOption = new Option(data[0].atc_2_Name, data[0].atc_2_id, false, false);
+                        $('#id_atc2').append(newOption).trigger('change');
+                        $('#id_atc2').val(data[0].atc_2_id).trigger('change');
+                    }
+                    if ($('#id_atc3').find("option[value='" + data[0].atc_3_id + "']").length) {
+                        $('#id_atc3').val(data[0].atc_3_id).trigger('change');
+                    } else {
+                        var newOption = new Option(data[0].atc_3_Name, data[0].atc_3_id, false, false);
+                        $('#id_atc3').append(newOption).trigger('change');
+                        $('#id_atc3').val(data[0].atc_3_id).trigger('change');
+                    }
+                    $('#id_ddd').html('');
+                    $.each(data, function (index, item) {
+                        if ($('#id_ddd').find("option[value='" + item.id + "']").length) {
+
+                        } else {
+                            var newOption = new Option(item.Name, item.id, false, false);
+                            $('#id_ddd').append(newOption).trigger('change');
+
+                        }
+                    })
+                    $('#id_ddd').val(null).trigger('change');
+                });
+            });
+        })
+
+
+</script>
+
+
+{% endblock %}
+

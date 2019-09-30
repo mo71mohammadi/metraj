@@ -83,8 +83,86 @@ class Advertisement(models.Model):
 
 
 class Setting(models.Model):
+    username = models.CharField(max_length=30, null=True, blank=True)
+    password = models.CharField(max_length=30, null=True, blank=True)
     name = models.CharField(max_length=20, unique=True, null=True)
     cookie = models.CharField(max_length=500, null=True, blank=True)
     transactions = models.CharField(max_length=500, null=True, blank=True)
     estates = models.CharField(max_length=500, null=True, blank=True)
 
+
+class EquipmentMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=50, blank=True, null=True)
+
+
+class EquipmentKashano(models.Model):
+    metraj = models.ForeignKey(EquipmentMetraj, on_delete=models.CASCADE, null=True, blank=True)
+    value = models.CharField(max_length=50, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class AreaMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class AreaKashano(models.Model):
+    metraj = models.ForeignKey(AreaMetraj, on_delete=models.CASCADE, null=True, blank=True)
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class DocumentMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class DocumentKashano(models.Model):
+    metraj = models.ForeignKey(DocumentMetraj, on_delete=models.CASCADE, null=True)
+    value = models.CharField(max_length=100, blank=True, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class TransactionMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, null=True)
+
+
+class TransactionKashano(models.Model):
+    metraj = models.ForeignKey(DocumentMetraj, on_delete=models.CASCADE, null=True)
+    value = models.CharField(max_length=100, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class HabitationMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, null=True)
+
+
+class HabitationKashano(models.Model):
+    metraj = models.ForeignKey(HabitationMetraj, on_delete=models.CASCADE, null=True)
+    value = models.CharField(max_length=100, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class DirectionMetraj(models.Model):
+    value = models.IntegerField(null=True)
+    text = models.CharField(max_length=100, null=True)
+
+
+class DirectionKashano(models.Model):
+    metraj = models.ForeignKey(DirectionMetraj, on_delete=models.CASCADE, null=True)
+    value = models.CharField(max_length=100, null=True)
+    text = models.CharField(max_length=100, blank=True, null=True)
+
+
+class EstateMetraj(models.Model):
+    value = models.IntegerField(unique=True, null=True)
+    text = models.CharField(max_length=100, null=True)
+
+
+class EstateKashano(models.Model):
+    metraj = models.ForeignKey(EstateMetraj, on_delete=models.CASCADE, null=True)
+    value = models.CharField(max_length=100, null=True, unique=True)
+    text = models.CharField(max_length=100, blank=True, null=True)

@@ -15,26 +15,26 @@
     <link rel="shortcut icon" href="../static/assets/images/favicon.png">
 
     <!-- BEGIN CSS -->
-    <link href="../static/assets/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/bootstrap-rtl/dist/css/bootstrap-rtl.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/metisMenu/distadmin/Manage_Person/#/metisMenu.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/simple-line-icons/css/simple-line-icons.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"
+    <link href="../../static/assets/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/bootstrap-rtl/dist/css/bootstrap-rtl.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/metisMenu/distadmin/Manage_Person/#/metisMenu.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/simple-line-icons/css/simple-line-icons.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"
           rel="stylesheet">
-    <link href="../static/assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/paper-ripple/dist/paper-ripple.min.css" rel="stylesheet">
-    <link href="../static/assets/plugins/iCheck/skins/square/_all.css" rel="stylesheet">
-    <link href="../static/assets/css/style.css" rel="stylesheet">
-    <link href="../static/assets/css/colors.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/paper-ripple/dist/paper-ripple.min.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/iCheck/skins/square/_all.css" rel="stylesheet">
+    <link href="../../static/assets/css/style.css" rel="stylesheet">
+    <link href="../../static/assets/css/colors.css" rel="stylesheet">
     <!-- END CSS -->
-    <link href="../static/assets/plugins/data-table/css/dataTables.bootstrap.css" rel="stylesheet">
-    <link href="../static/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/jquery-ui.css">
+    <link href="../../static/assets/plugins/data-table/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../static/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="../static/jquery-1.12.4.js"></script>
-    <script src="../static/jquery-ui.js"></script>
+    <script src="../../static/jquery-1.12.4.js"></script>
+    <script src="../../static/jquery-ui.js"></script>
 </head>
 
 <body class="active-ripple theme-blue fix-header sidebar-extra">
@@ -50,7 +50,7 @@
 <div class="navbar navbar-fixed-top" id="main-navbar">
     <div class="header-right">
         <a href="/admin/" class="logo-con">
-            <img src="../static/clipart.jpeg" class="img-responsive center-block" alt="DrugCenter logo">
+            <img src="../../static/clipart.jpeg" class="img-responsive center-block" alt="DrugCenter logo">
         </a>
     </div><!-- /.header-right -->
     <div class="header-left">
@@ -262,7 +262,7 @@
                             <li>
                                 <a href="/admin/divar" class="">
                                     <i class="icon-bag "></i>
-                                                                        <span>دیوار</span>
+                                    <span>دیوار</span>
 
                                 </a>
                             </li>
@@ -271,7 +271,7 @@
                             <li>
                                 <a href="/admin/maplak" class="">
                                     <i class="icon-bag "></i>
-                                                                        <span>مپلاک</span>
+                                    <span>مپلاک</span>
 
                                 </a>
                             </li>
@@ -280,12 +280,30 @@
                 </li>
                 <li>
                     {% if perms.auth.Manage_Person_Read %}
-                        <li>
-                            <a href="/admin/setting" class="">
-                                <i class="icon-settings"></i>
-                                <span>تنظیمات </span>
-                            </a>
-                        </li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-settings"></i>
+                            <span>تنظیمات </span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="/admin/kashano/setting_get">
+                                    <i class="icon-settings"></i>
+                                    <span>تنظیمات دریافت </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/kashano/setting_metraj">
+                                    <i class="icon-settings"></i>
+                                    <span>تنظیمات مثراژ </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/kashano/setting_kashano">
+                                    <i class="icon-settings"></i>
+                                    <span>تنظیمات کاشانو </span>
+                                </a>
+                            </li>
+                        </ul>
                     {% endif %}
                 </li>
                 <li class="">
@@ -356,18 +374,18 @@
 <!-- END CODE MODAL -->
 
 <!-- BEGIN JS -->
-<script src="../static/assets/plugins/jquery-migrate/jquery-migrate-1.2.1.min.js"></script>
-<script src="../static/assets/js/holder.js"></script>
-<script src="../static/assets/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../static/assets/plugins/metisMenu/dist/metisMenu.min.js"></script>
-<script src="../static/assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
-<script src="../static/assets/plugins/paper-ripple/dist/PaperRipple.min.js"></script>
-<script src="../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="../static/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
-<script src="../static/assets/plugins/screenfull/dist/screenfull.min.js"></script>
-<script src="../static/assets/plugins/iCheck/icheck.min.js"></script>
-<script src="../static/assets/plugins/switchery/dist/switchery.js"></script>
-<script src="../static/assets/js/core.js"></script>
+<script src="../../static/assets/plugins/jquery-migrate/jquery-migrate-1.2.1.min.js"></script>
+<script src="../../static/assets/js/holder.js"></script>
+<script src="../../static/assets/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../../static/assets/plugins/metisMenu/dist/metisMenu.min.js"></script>
+<script src="../../static/assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+<script src="../../static/assets/plugins/paper-ripple/dist/PaperRipple.min.js"></script>
+<script src="../../static/assets/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="../../static/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="../../static/assets/plugins/screenfull/dist/screenfull.min.js"></script>
+<script src="../../static/assets/plugins/iCheck/icheck.min.js"></script>
+<script src="../../static/assets/plugins/switchery/dist/switchery.js"></script>
+<script src="../../static/assets/js/core.js"></script>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -378,23 +396,23 @@
 <!-- END JS -->
 
 <!-- BEGIN PAGE JAVASCRIPT -->
-<script src="../static/assets/plugins/chart.js/dist/Chart.bundle.min.js"></script>
-<script src="../static/assets/plugins/jquery-incremental-counter/jquery.incremental-counter.min.js"></script>
-<script src="../static/assets/plugins/ammap3/ammap/ammap.js"></script>
-<script src="../static/assets/plugins/ammap3/ammap/maps/js/iranHighFa.js"></script>
-<script src="../static/assets/js/pages/dashboard2.js"></script>
+<script src="../../static/assets/plugins/chart.js/dist/Chart.bundle.min.js"></script>
+<script src="../../static/assets/plugins/jquery-incremental-counter/jquery.incremental-counter.min.js"></script>
+<script src="../../static/assets/plugins/ammap3/ammap/ammap.js"></script>
+<script src="../../static/assets/plugins/ammap3/ammap/maps/js/iranHighFa.js"></script>
+<script src="../../static/assets/js/pages/dashboard2.js"></script>
 <!-- END PAGE JAVASCRIPT -->
 
 <!-- BEGIN PAGE JAVASCRIPT -->
-<script src="../static/assets/plugins/data-table/js/jquery.dataTables.min.js"></script>
-<script src="../static/assets/plugins/data-table/js/dataTables.bootstrap.js"></script>
-<script src="../static/assets/js/pages/datatable.js"></script>
+<script src="../../static/assets/plugins/data-table/js/jquery.dataTables.min.js"></script>
+<script src="../../static/assets/plugins/data-table/js/dataTables.bootstrap.js"></script>
+<script src="../../static/assets/js/pages/datatable.js"></script>
 <!-- END PAGE JAVASCRIPT -->
 
 <!-- BEGIN PAGE JAVASCRIPT -->
-<script src="../static/assets/plugins/select2/dist/js/select2.full.min.js"></script>
-<script src="../static/assets/plugins/select2/dist/js/i18n/fa.js"></script>
-<script src="../static/assets/js/pages/select2.js"></script>
+<script src="../../static/assets/plugins/select2/dist/js/select2.full.min.js"></script>
+<script src="../../static/assets/plugins/select2/dist/js/i18n/fa.js"></script>
+<script src="../../static/assets/js/pages/select2.js"></script>
 <!-- END PAGE JAVASCRIPT -->
 <!-- BEGIN PAGE JAVASCRIPT -->
 <!--<script src="../../static/assets/plugins/datepicker/jquery-ui-1.10.1.custom.min.js"></script>-->

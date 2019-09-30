@@ -44,13 +44,31 @@
                             <div class="col-sm-12">
                                 <div class="form-group row">
                                     <div class="col-sm-7">
-                                        <input type="text" style="width: 600px" id="cookie" name="cookie"
-                                               value="{% for setting in settings %}{{ setting.cookie }}{% endfor %}"
+                                        <input type="text" style="width: 600px" id="username" name="username"
+                                               value="{% for setting in settings %}{{ setting.username }}{% endfor %}"
                                                class="form-control">
                                     </div>
-                                    <label for="id_code" class="col-sm-4 col-form-label"> Cookies : <i
+                                    <label for="username" class="col-sm-4 col-form-label"> username : <i
                                             class="text-danger">*</i></label>
                                 </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-7">
+                                        <input type="text" style="width: 600px" id="password" name="password"
+                                               value="{% for setting in settings %}{{ setting.password }}{% endfor %}"
+                                               class="form-control">
+                                    </div>
+                                    <label for="password" class="col-sm-4 col-form-label"> password : <i
+                                            class="text-danger">*</i></label>
+                                </div>
+<!--                                <div class="form-group row">-->
+<!--                                    <div class="col-sm-7">-->
+<!--                                        <input type="text" style="width: 600px" id="cookie" name="cookie"-->
+<!--                                               value="{% for setting in settings %}{{ setting.cookie }}{% endfor %}"-->
+<!--                                               class="form-control">-->
+<!--                                    </div>-->
+<!--                                    <label for="id_code" class="col-sm-4 col-form-label"> Cookies : <i-->
+<!--                                            class="text-danger">*</i></label>-->
+<!--                                </div>-->
                                 <div class="form-group row">
                                     <div class="col-sm-7">
                                         <select id="transactions" multiple name="transactions"

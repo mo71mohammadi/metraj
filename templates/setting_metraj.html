@@ -1,0 +1,192 @@
+{% extends "blank.html" %}
+{% block content %}
+<div class="row">
+    <!-- BEGIN BREADCRUMB -->
+    <div class="col-md-12">
+        <div class="breadcrumb-box border shadow">
+            <ul class="breadcrumb">
+                <li><a href="dashboard.html">پیشخوان</a></li>
+                <li><a href="#">جدول ها</a></li>
+                <li class="active">پلاگین Data Table</li>
+            </ul>
+            <div class="breadcrumb-left">
+                دوشنبه، 1398/02/9 <i class="icon-calendar"></i>
+            </div><!-- /.breadcrumb-left -->
+        </div><!-- /.breadcrumb-box -->
+    </div><!-- /.col-md-12 -->
+    <div class="col-sm-12">
+        <div class="column">
+            <a href="setting_metraj?type=estates" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Estate </a>
+            <a href="setting_metraj?type=transactions" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Transaction </a>
+            <a href="setting_metraj?type=equipments" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Equipment </a>
+            <a href="setting_metraj?type=areas" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Area </a>
+            <a href="setting_metraj?type=documents" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Document </a>
+            <a href="setting_metraj?type=habitations" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Habitation </a>
+            <a href="setting_metraj?type=directions" class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px"> Direction </a>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="portlet box border shadow">
+            <div class="portlet-heading">
+                <div class="portlet-title" style="direction: ltr">
+                    <h3 class="title" style="font-weight: bold">
+                        <i class="icon-settings"></i>
+                        Estate Setting
+                    </h3>
+                </div><!-- /.portlet-title -->
+                <div class="buttons-box" style="right: 13px;">
+                    <div class="code-modal hide">
+                    </div>
+                    <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                       href="#">
+                        <i class="icon-size-fullscreen"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                       href="#">
+                        <i class="icon-arrow-up"></i>
+                    </a>
+                </div><!-- /.buttons-box -->
+            </div><!-- /.portlet-heading -->
+            <div class="portlet-body" style="/*! display: none; */">
+                <div class="col-sm-12" style="text-align: center">
+                    <div class="column">
+                        <button class="btn btn-info m-b-5 m-r-2" id="add-modal"
+                                data-toggle="modal"
+                                data-target="#add_modal"><i class="fa fa-plus"> </i> اضافه کردن
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped" id="data-table">
+                        <thead>
+                        <tr>
+                            <th class="th-sm" style="text-align: center">SL.
+                            </th>
+                            <th class="th-sm" style="text-align: center">SL.
+                            </th>
+                            <th class="th-sm" style="text-align: center">Area ID
+                            </th>
+                            <th class="th-sm" style="text-align: center;">Area Name
+                            </th>
+                            <th class="th-sm" style="width: 160px; text-align: center">Action
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.value }}</td>
+                            <td>{{ item.value }}</td>
+                            <td>{{ item.text }}</td>
+                            <td style="text-align: center">
+                                <button class="edit-modal btn btn-info btn-sm" type="submit" data-toggle="modal"
+                                        data-target="#add_modal" name="estate" value="{{ item.id }}"> ویرایش
+                                </button>
+                                <button class="delete-modal btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#delete_modal" value="{{ item.id }}" name="estate"> حذف
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!-- /.table-responsive -->
+            </div><!-- /.portlet-body -->
+        </div><!-- /.portlet -->
+    </div><!-- /.col-md-12 -->
+</div><!-- /.row -->
+
+<!--# delete modal #-->
+<div class="modal" id="delete_modal">
+    <div class="modal-dialog">
+        <form action="" method="post" id="form_2">
+            {% csrf_token %}
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="title" style="font-weight: bold">
+                        <i class="icon-frane"></i>
+                        Delete Estate
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p style="margin-bottom: 0">شما در حال حذف اطلاعات جاری هستید . آیا ادامه میدهید ؟</p>
+                    <input id="item" type="hidden" name="item" value="">
+                    <input id="type" type="hidden" name="type" value="">
+                    <input id="action" type="hidden" name="action" value="delete">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            style="width: 60px; font-weight: bold">خیر
+                    </button>
+
+                    <button type="submit" class="btn btn-danger" id="submit_form_2"
+                            style="width: 60px; font-weight: bold">حذف
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            $('#data-table').on('click', '.delete-modal', function () {
+                $('#item').val($(this).val());
+                $('#type').val($(this).attr("name"))
+            })
+        })
+
+</script>
+
+<!--# Add & Edit modal #-->
+<div class="modal " id="add_modal">
+    <div class="modal-dialog">
+        <form action="" method="post" class="metaaa" id="form_1">
+            {% csrf_token %}
+            <input type="hidden" id="edit_action" name="action" value="add" required>
+            <input type="hidden" id="edit_id" name="id" value="" required>
+            <div class="modal-content">
+                <div class="modal-header" id="Header_1">Add Area</div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="id" class="col-sm-4 col-form-label"> Area ID <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="number" id="id" name="value" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-4 col-form-label"> Area Name <i
+                                        class="text-danger">*</i></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="name" name="text" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="Rest_form">Rest</button>
+                    <button type="submit" class="btn btn-success" id="submit_form_1">Add</button>
+                    <button type="button" class="btn btn-danger" id="modal_dis" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function (){
+        $('#data-table').on('click', '.edit-modal', function () {
+            $('#edit_id').val($(this).val());
+            $('#edit_action').val('update');
+            $('#id').val($(this).parent().prev().prev().text());
+            $('#name').val($(this).parent().prev().text());
+        })
+    })
+</script>
+{% endblock %}
