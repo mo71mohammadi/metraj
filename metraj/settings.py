@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'metraj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'mojtaba',
         'USER': 'root',
         'PASSWORD': 'new-password',
