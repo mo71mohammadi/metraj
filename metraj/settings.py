@@ -25,7 +25,8 @@ SECRET_KEY = 'bit+_x48h+s=90_f#!gkg67ut(hjf)d+rtxz1e6y5055z)p@em'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fsn.ir']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
