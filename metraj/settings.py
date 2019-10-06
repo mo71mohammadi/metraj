@@ -93,7 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
         'NAME': 'fsnir_metraj',
-        'USER': 'fsnir_metraj',
+        'USER': 'fsnir_root',
         'PASSWORD': '$i0FUjwu{4ZF',
         # 'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
         'PORT': '3306',
