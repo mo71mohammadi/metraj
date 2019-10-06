@@ -5,7 +5,6 @@ from django.db.models import Q
 
 from django.shortcuts import render
 import ast
-import json
 import jdatetime
 import requests
 from django.contrib.admin.views.decorators import staff_member_required
@@ -15,7 +14,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core import serializers
 from kashano import models as model
-from one import models
 import json
 
 
