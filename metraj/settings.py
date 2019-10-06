@@ -97,10 +97,10 @@ DATABASES = {
         'PASSWORD': 'new-password',
         'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
         'PORT': '3306',
-        'OPTIONS': {
-            # Tell MySQLdb to connect with 'utf8mb4' character set
-            'charset': 'utf8mb4',
-        },
+        # 'OPTIONS': {
+        #     # Tell MySQLdb to connect with 'utf8mb4' character set
+        #     # 'charset': 'utf8mb4',
+        # },
     }
 }
 
