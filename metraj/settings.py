@@ -24,11 +24,11 @@ SECRET_KEY = 'bit+_x48h+s=90_f#!gkg67ut(hjf)d+rtxz1e6y5055z)p@em'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-# ALLOWED_HOSTS = ['fsn.ir']
-# DEBUG = False
+ALLOWED_HOSTS = ['fsn.ir']
+DEBUG = False
 
-ALLOWED_HOSTS = []
-DEBUG = True
+# ALLOWED_HOSTS = []
+# DEBUG = True
 
 
 
@@ -73,11 +73,11 @@ TEMPLATES = [
     },
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
+# ]
 
 WSGI_APPLICATION = 'metraj.wsgi.application'
 
@@ -158,7 +158,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/kashano/'
-# MEDIA_URL = '/media'
-# STATICFILES_DIRS = [BASE_DIR+"/assets"]
-# STATIC_ROOT = '/home/fsnir/public_html/static'
-# MEDIA_ROOT = '/home/fsnir/public_html/media'
+MEDIA_URL = '/media'
+STATICFILES_DIRS = [BASE_DIR+"/assets"]
+STATIC_ROOT = '/home/fsnir/public_html/static'
+MEDIA_ROOT = '/home/fsnir/public_html/media'
