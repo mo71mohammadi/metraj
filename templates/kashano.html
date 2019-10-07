@@ -274,9 +274,9 @@
                                 <div class="col-sm-8">
                                     <select name="area_id" class="form-control select2 allow-cancel" id="area_id"
                                             style="width: 200px">
-<!--                                        {% for area in areas%}-->
-<!--                                        <option value="{{area.area_id}}">{{area.text}}</option>-->
-<!--                                        {% endfor %}-->
+                                        {% for item in areas %}
+                                        <option value="{{item.0}}">{{item.1}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -404,30 +404,11 @@
                 $.get("/kashano/delete", {ids: ID});
             })
         })
-
-
-
-
-
-
-
-
-
 </script>
 <script>
         $(document).ready(function () {
             $(".select2").val(null).trigger('change');
         });
-
-
-
-
-
-
-
-
-
-
 </script>
 
 {% endblock %}

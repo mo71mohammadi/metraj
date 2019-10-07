@@ -176,17 +176,26 @@ def kashano(request):
                       if request.GET.get(filter)]
     if filter_clauses:
         records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
-        areas = records.values('area_id').distinct()
     else:
         records = model.Estate.objects.filter()
-        areas = records.values('area_id').distinct()
 
     download_times = model.Estate.objects.values('download_time').distinct()
-    # areas = model.Area.objects.filter()
-    paginator = Paginator(records, 100)
+    Session = requests.session()
+    setting = model.Setting.objects.get(name='kashano')
+    login = Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+    homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
+    areas = []
+    print(homes.json())
+    for item in homes.json():
+        if not (item['area_id'] in areas):
+            areas.append([item['area_id'], item['text']])
+        if item['childs']:
+            for result in item['childs']:
+                if not (result['area_id'] in areas):
+                    areas.append([result['area_id'], result['text']])
+    paginator = Paginator(records, 1000)
     records = paginator.get_page(request.GET.get('page'))
-    print(areas)
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": "areas"})
+    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": areas})
 
 
 def obj_list(name):
