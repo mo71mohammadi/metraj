@@ -23,10 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'bit+_x48h+s=90_f#!gkg67ut(hjf)d+rtxz1e6y5055z)p@em'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
-ALLOWED_HOSTS = ['fsn.ir']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['fsn.ir']
+# DEBUG = False
+
+ALLOWED_HOSTS = []
+DEBUG = True
+
 
 
 # Application definition
@@ -70,11 +73,11 @@ TEMPLATES = [
     },
 ]
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
-# ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
+]
 
 WSGI_APPLICATION = 'metraj.wsgi.application'
 
@@ -89,28 +92,13 @@ WSGI_APPLICATION = 'metraj.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'fsnir_metraj',
-        'USER': 'fsnir_root',
-        'PASSWORD': '$i0FUjwu{4ZF',
-        # 'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
-        'PORT': '3306',
-        # 'OPTIONS': {
-        #     # Tell MySQLdb to connect with 'utf8mb4' character set
-        #     # 'charset': 'utf8mb4',
-        # },
-    }
-}
-#
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'mysql.connector.django',
-#         'NAME': 'mojtaba',
-#         'USER': 'root',
-#         'PASSWORD': 'new-password',
-#         'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
+#         'NAME': 'fsnir_metraj',
+#         'USER': 'fsnir_root',
+#         'PASSWORD': '$i0FUjwu{4ZF',
+#         # 'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
 #         'PORT': '3306',
 #         # 'OPTIONS': {
 #         #     # Tell MySQLdb to connect with 'utf8mb4' character set
@@ -118,6 +106,21 @@ DATABASES = {
 #         # },
 #     }
 # }
+#
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'mojtaba',
+        'USER': 'root',
+        'PASSWORD': 'new-password',
+        'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
+        'PORT': '3306',
+        # 'OPTIONS': {
+        #     # Tell MySQLdb to connect with 'utf8mb4' character set
+        #     'charset': 'utf8mb4',
+        # },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -155,7 +158,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/kashano/'
-MEDIA_URL = '/media'
-STATICFILES_DIRS = [BASE_DIR+"/assets"]
-STATIC_ROOT = '/home/fsnir/public_html/static'
-MEDIA_ROOT = '/home/fsnir/public_html/media'
+# MEDIA_URL = '/media'
+# STATICFILES_DIRS = [BASE_DIR+"/assets"]
+# STATIC_ROOT = '/home/fsnir/public_html/static'
+# MEDIA_ROOT = '/home/fsnir/public_html/media'

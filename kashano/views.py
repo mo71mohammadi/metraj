@@ -179,10 +179,10 @@ def kashano(request):
     else:
         records = model.Estate.objects.filter()
     download_times = model.Estate.objects.values('download_time').distinct()
-    areas = model.Area.objects.filter()
-    # paginator = Paginator(records, 100)
-    # records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": areas})
+    # areas = model.Area.objects.filter()
+    paginator = Paginator(records, 100)
+    records = paginator.get_page(request.GET.get('page'))
+    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": "areas"})
 
 
 def obj_list(name):
