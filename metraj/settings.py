@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/home/metraj/metraj_data_django/static/'
+STATIC_URL = '/var/www/fsn.ir//static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
 ]
