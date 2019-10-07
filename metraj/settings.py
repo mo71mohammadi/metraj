@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'bit+_x48h+s=90_f#!gkg67ut(hjf)d+rtxz1e6y5055z)p@em'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['fsn.ir']
 # ALLOWED_HOSTS = []
@@ -71,17 +71,17 @@ TEMPLATES = [
 ]
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = '/home/metraj/metraj_data_django/static'
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
 # ]
-MEDIA_URL = '/media'
+# MEDIA_URL = '/media'
 STATICFILES_DIRS = [BASE_DIR+"/assets"]
 STATIC_ROOT = '/home/metraj/metraj_data_django/static'
-MEDIA_ROOT = '/home/cityart2/public_html/media'
+# MEDIA_ROOT = '/home/cityart2/public_html/media'
 
 
 WSGI_APPLICATION = 'metraj.wsgi.application'
