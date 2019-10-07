@@ -1,0 +1,50 @@
+{% extends "blank.html" %}
+{% block content %}
+<div class="row">
+    <!-- BEGIN BREADCRUMB -->
+    <div class="col-md-12" style="margin-top: 40px;">
+        <div class="portlet box border shadow">
+            <div class="portlet-heading">
+                <div class="portlet-title">
+                    <h3 class="title" style="font-weight: bold">
+                        <i class="icon-settings"></i>
+                        ویرایش
+                    </h3>
+                </div><!-- /.portlet-title -->
+                <div class="buttons-box">
+                    <div class="code-modal hide">
+                    </div>
+                    <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                       href="#">
+                        <i class="icon-size-fullscreen"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                       href="#">
+                        <i class="icon-arrow-up"></i>
+                    </a>
+                </div><!-- /.buttons-box -->
+            </div><!-- /.portlet-heading -->
+            <div class="portlet-body" style="direction: ltr">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for item in form%}
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <input type="text" id="{{ item.id }}" name="{{ item.name }}" value="{{ item.value }}"
+                                           class="form-control col-sm-6">
+                                    <label for="{{ item.id }}" class="col-sm-5 col-form-label"> {{ item.name }} : <i
+                                            class="text-danger">*</i></label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <input type="submit" value="Submit">
+                </form>
+
+            </div><!-- /.portlet-body -->
+        </div><!-- /.portlet -->
+    </div><!-- /.col-md-12 -->
+</div><!-- /.row -->
+
+{% endblock %}

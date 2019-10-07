@@ -2,7 +2,6 @@ import csv
 from functools import reduce
 import operator
 from django.db.models import Q
-
 from django.shortcuts import render
 import ast
 import jdatetime
@@ -15,6 +14,7 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from kashano import models as model
 import json
+from . import forms
 
 
 def change_date(time):
@@ -176,13 +176,17 @@ def kashano(request):
                       if request.GET.get(filter)]
     if filter_clauses:
         records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
+        areas = records.values('area_id').distinct()
     else:
         records = model.Estate.objects.filter()
+        areas = records.values('area_id').distinct()
+
     download_times = model.Estate.objects.values('download_time').distinct()
     # areas = model.Area.objects.filter()
     paginator = Paginator(records, 100)
     records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": 'areas'})
+    print(areas)
+    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": "areas"})
 
 
 def obj_list(name):
@@ -210,6 +214,24 @@ def view_record(request):
     record_list[0]['fields']['tasisat'] = obj_list(tasisats)
     record_list = json.dumps(record_list[0]['fields'])
     return HttpResponse(record_list, 'application/json')
+
+
+@staff_member_required()
+@login_required()
+def edit_record(request):
+    print(request.GET.get('id'))
+    instance = model.Estate.objects.get(id=request.GET.get('id'))
+    form = forms.EstateForm(instance=instance)
+    if request.POST:
+        form = forms.EstateForm(request.POST, instance=instance)
+        if form.is_valid():
+            print('as')
+            form.save()
+            return redirect("kashano")
+        else:
+            print(form.errors)
+
+    return render(request, 'edit.html', {"form": form})
 
 
 @staff_member_required()

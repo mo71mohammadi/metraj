@@ -75,7 +75,7 @@
                                    type="submit" value="{{ record.id }}">نمایش
                                 </a>
                                 <a class="send-modal btn btn-success btn-sm"
-                                   href="/admin/kashano/estate/{{ record.id }}/change/" type="submit"> ویرایش</a>
+                                   href="/kashano/edit?id={{ record.id }}" type="submit"> ویرایش</a>
                                 {% if record.delete_status == False or record.delete_status == None %}
                                 <a class="delete-modal btn btn-danger btn-sm" href="/kashano/delete?ids={{ record.id }}" >حذف
                                 </a>
@@ -274,9 +274,9 @@
                                 <div class="col-sm-8">
                                     <select name="area_id" class="form-control select2 allow-cancel" id="area_id"
                                             style="width: 200px">
-                                        {% for area in areas%}
-                                        <option value="{{area.area_id}}">{{area.text}}</option>
-                                        {% endfor %}
+<!--                                        {% for area in areas%}-->
+<!--                                        <option value="{{area.area_id}}">{{area.text}}</option>-->
+<!--                                        {% endfor %}-->
                                     </select>
                                 </div>
                             </div>
