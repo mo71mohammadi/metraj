@@ -92,35 +92,35 @@ WSGI_APPLICATION = 'metraj.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mysql.connector.django',
-#         'NAME': 'fsnir_metraj',
-#         'USER': 'fsnir_root',
-#         'PASSWORD': '$i0FUjwu{4ZF',
-#         # 'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
-#         'PORT': '3306',
-#         # 'OPTIONS': {
-#         #     # Tell MySQLdb to connect with 'utf8mb4' character set
-#         #     # 'charset': 'utf8mb4',
-#         # },
-#     }
-# }
-#
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
-        'NAME': 'mojtaba',
-        'USER': 'root',
-        'PASSWORD': 'new-password',
-        'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
+        'NAME': 'fsnir_metraj',
+        'USER': 'fsnir_root',
+        'PASSWORD': '$i0FUjwu{4ZF',
+        # 'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
         'PORT': '3306',
         # 'OPTIONS': {
         #     # Tell MySQLdb to connect with 'utf8mb4' character set
-        #     'charset': 'utf8mb4',
+        #     # 'charset': 'utf8mb4',
         # },
     }
 }
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql.connector.django',
+#         'NAME': 'mojtaba',
+#         'USER': 'root',
+#         'PASSWORD': 'new-password',
+#         'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
+#         'PORT': '3306',
+#         # 'OPTIONS': {
+#         #     # Tell MySQLdb to connect with 'utf8mb4' character set
+#         #     'charset': 'utf8mb4',
+#         # },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
