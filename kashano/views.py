@@ -88,7 +88,7 @@ def get(request):
                                         addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'],
                                         size=dic['size'], width=dic['width'],
                                         length=dic['length'], bar=dic['bar'],
-                                        age=dic['age'], rooms=dic['rooms'],
+                                        age=dic['age'], rooms=dic['rooms'], delete_status=False,
                                         floor=dic['floor'], floor_units=dic['floor_units'],
                                         floors=dic['floors'], phone_lines=dic['phone_lines'],
                                         view_material=dic['view_material'], cabinet=dic['cabinet'],
@@ -182,7 +182,7 @@ def kashano(request):
     # areas = model.Area.objects.filter()
     paginator = Paginator(records, 100)
     records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": "areas"})
+    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": 'areas'})
 
 
 def obj_list(name):
@@ -215,10 +215,11 @@ def view_record(request):
 @staff_member_required()
 @login_required()
 def delete_record(request):
+    print(request.GET.get('ids'))
     for item in request.GET.get('ids').split(','):
         print(item)
         model.Estate.objects.filter(id=item).update(delete_status=True)
-    return HttpResponse(request.GET.getlist('ids'))
+    return redirect("kashano")
 
 
 @staff_member_required()
