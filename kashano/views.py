@@ -193,7 +193,7 @@ def kashano(request):
             for result in item['childs']:
                 if not (result['area_id'] in areas):
                     areas.append([result['area_id'], result['text']])
-    paginator = Paginator(records, 1000)
+    paginator = Paginator(records, 300)
     records = paginator.get_page(request.GET.get('page'))
     return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": areas})
 
