@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/metraj/metraj_data_django/static/'
+STATIC_URL = '/metraj/metraj_data_django/staticfiles/'
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
