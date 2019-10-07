@@ -3,9 +3,9 @@ from django.db import models
 
 class Estate(models.Model):
     elead_id = models.CharField(max_length=50, null=True, blank=True, unique=True)
-    download_status = models.BooleanField(default=False)
+    download_status = models.BooleanField(default=False, null=True, blank=True)
     download_time = models.CharField(max_length=300, null=True, blank=True)
-    delete_status = models.BooleanField(default=False)
+    delete_status = models.BooleanField(default=False, null=True, blank=True)
     name = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     phone2 = models.CharField(max_length=50, null=True, blank=True)
