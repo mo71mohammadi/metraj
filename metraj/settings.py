@@ -71,15 +71,10 @@ TEMPLATES = [
 ]
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
-]
-# # MEDIA_URL = '/media'
-# STATICFILES_DIRS = [BASE_DIR+"/assets"]
-STATIC_ROOT = '/var/www/fsn.ir/static/'
-# # MEDIA_ROOT = '/home/cityart2/public_html/media'
-
+# STATIC_URL = '/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),  # Here you tell django to look for a folder named 'assets'
+# ]
 
 WSGI_APPLICATION = 'metraj.wsgi.application'
 
@@ -160,4 +155,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 # LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/kashano/'
-# STATIC_URL = '/static/'
+MEDIA_URL = '/media'
+STATICFILES_DIRS = [BASE_DIR+"/assets"]
+STATIC_ROOT = '/home/fsnir/public_html/static'
+MEDIA_ROOT = '/home/fsnir/public_html/media'
