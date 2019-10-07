@@ -177,7 +177,7 @@ def kashano(request):
     if filter_clauses:
         records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
     else:
-        records = model.Estate.objects.filter()
+        records = model.Estate.objects.filter(delete_status=False)
 
     download_times = model.Estate.objects.values('download_time').distinct()
     Session = requests.session()
