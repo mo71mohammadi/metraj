@@ -256,7 +256,6 @@ def delete_record(request):
 @staff_member_required()
 @login_required()
 def export_file(request):
-    print(request.GET)
     if request.GET.get('start'):
         start = request.GET.get('start')
     else:
@@ -265,28 +264,15 @@ def export_file(request):
         end = request.GET.get('end')
     else:
         end = jdatetime.date.today().togregorian() + jdatetime.timedelta(days=10)
-
-    download_status = request.GET.get('download_status')
-    download_time = request.GET.get('download_time')
-    filter_names = ('download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
+    filter_names = ('download_status', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
     filter_clauses = [Q(**{filter: request.GET[filter]})
                       for filter in filter_names
                       if request.GET.get(filter)]
     filter_clauses.append(Q(ctime__range=[start, end]))
-    print(filter_clauses)
     record = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
-    # if download_status:
-    #     record = model.Estate.objects.filter(ctime__range=[start, end], download_status=download_status,
-    #                                          delete_status=False)
-    # elif download_time:
-    #     record = model.Estate.objects.filter(ctime__range=[start, end], download_time=download_time,
-    #                                          delete_status=False)
-    # else:
-    #     record = model.Estate.objects.filter(ctime__range=[start, end], delete_status=False)
     record_list = serializers.serialize('json', record)
     record_list = json.loads(record_list)
     new_list = []
-    record.update(download_time=jdatetime.datetime.today(), download_status=True)
 
     for item in record_list:
         directions = model.Direction.objects.filter(estate_id=item['pk'])
