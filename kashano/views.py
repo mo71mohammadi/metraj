@@ -180,7 +180,6 @@ def kashano(request):
     else:
         records = model.Estate.objects.filter(delete_status=False)
 
-    download_times = model.Estate.objects.values('download_time').distinct()
     Session = requests.session()
     setting = model.Setting.objects.get(name='kashano')
     login = Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
