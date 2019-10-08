@@ -194,7 +194,7 @@ def kashano(request):
                     areas.append([result['area_id'], result['text']])
     paginator = Paginator(records, 300)
     records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, 'download_times': download_times, "areas": areas})
+    return render(request, 'kashano.html', {'records': records, "areas": areas})
 
 
 def obj_list(name):
