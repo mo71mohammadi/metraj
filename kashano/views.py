@@ -9,12 +9,13 @@ import requests
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound, FileResponse
 from django.shortcuts import render, redirect
 from django.core import serializers
 from kashano import models as model
 import json
 from . import forms
+from openpyxl import Workbook
 
 
 def change_date(time):
@@ -291,16 +292,21 @@ def export_file(request):
         response = HttpResponse(record_list, content_type='application/json')
         response['Content-Disposition'] = 'attachment; filename=export.json'
     elif request.GET.get('format') == 'xlsx':
+        wb = Workbook()
+        ws = wb.active
         key_list = []
         if new_list:
             for key in new_list[0]:
                 key_list.append(key)
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="export.csv"'
-        writer = csv.writer(response)
-        writer.writerow(key_list)
+        ws.append(key_list)
         for record in new_list:
-            writer.writerow(record.values())
+            new_values = []
+            for item in list(record.values()):
+                new_values.append(str(item))
+            ws.append(new_values)
+        wb.save('export.xlsx')
+        response = FileResponse(open('name.xlsx', 'rb'))
+        response['Content-Disposition'] = 'attachment; filename="export.xlsx"'
     else:
         response = HttpResponse('Parameter Format Not Correct')
     return response
