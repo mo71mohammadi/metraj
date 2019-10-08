@@ -1,11 +1,24 @@
 Python 3.7.3
-Django 2.2.4
-install anaconda
 
 ## require package
-pip install requests
-conda install -c bioconda mysqlclient
-conda install -c anaconda mysql-connector-python
+    Django 2.2.4
+    jdatetime
+    mysqlclient
+    requests
 
-## Create utf-8 DB
-CREATE DATABASE <dbname> CHARACTER SET utf8;
+setup python env:
+    cPanel --->  software section ---> Setup python app	: python version 3.7, select project dir
+    modules (package) ---> Django & jdatetime & mysqlclient & requests
+    in Terminal run “source /home/fsnir/virtualenv/metraj_metraj__data__django/3.7/bin/activate”
+    run command “python manage.py makemigrations” and “python manage.py migrate”
+    edit “passenger_wsgi.py” in dir project and change to ---> “from myproject.wsgi 	import application”
+    Edit setting.py:
+    ALLOWED_HOSTS = [] ---> ALLOWED_HOSTS = ['fsn.ir']
+    DEBUG = True ---> DEBUG = FALSE
+    set DATABSES section and set NAME (database name) & USER & PASSWORD
+    add:
+    MEDIA_URL = '/media'
+    STATICFILES_DIRS = [BASE_DIR+"/assets"]
+    STATIC_ROOT = '/home/cityart2/public_html/static'
+    MEDIA_ROOT = '/home/cityart2/public_html/media'
+    Terminal (in dir project) run:  “python manage.py collectstatic”
