@@ -175,6 +175,7 @@ def kashano(request):
                       for filter in filter_names
                       if request.GET.get(filter)]
     if filter_clauses:
+        print(filter_clauses)
         records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
     else:
         records = model.Estate.objects.filter(delete_status=False)
@@ -185,7 +186,6 @@ def kashano(request):
     login = Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
     homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
     areas = []
-    print(homes.json())
     for item in homes.json():
         if not (item['area_id'] in areas):
             areas.append([item['area_id'], item['text']])
@@ -268,14 +268,21 @@ def export_file(request):
 
     download_status = request.GET.get('download_status')
     download_time = request.GET.get('download_time')
-    if download_status:
-        record = model.Estate.objects.filter(ctime__range=[start, end], download_status=download_status,
-                                             delete_status=False)
-    elif download_time:
-        record = model.Estate.objects.filter(ctime__range=[start, end], download_time=download_time,
-                                             delete_status=False)
-    else:
-        record = model.Estate.objects.filter(ctime__range=[start, end], delete_status=False)
+    filter_names = ('download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
+    filter_clauses = [Q(**{filter: request.GET[filter]})
+                      for filter in filter_names
+                      if request.GET.get(filter)]
+    filter_clauses.append(Q(ctime__range=[start, end]))
+    print(filter_clauses)
+    record = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
+    # if download_status:
+    #     record = model.Estate.objects.filter(ctime__range=[start, end], download_status=download_status,
+    #                                          delete_status=False)
+    # elif download_time:
+    #     record = model.Estate.objects.filter(ctime__range=[start, end], download_time=download_time,
+    #                                          delete_status=False)
+    # else:
+    #     record = model.Estate.objects.filter(ctime__range=[start, end], delete_status=False)
     record_list = serializers.serialize('json', record)
     record_list = json.loads(record_list)
     new_list = []
