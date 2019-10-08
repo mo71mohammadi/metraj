@@ -305,7 +305,7 @@ def export_file(request):
                 new_values.append(str(item))
             ws.append(new_values)
         wb.save('export.xlsx')
-        response = FileResponse(open('name.xlsx', 'rb'))
+        response = FileResponse(open('export.xlsx', 'rb'))
         response['Content-Disposition'] = 'attachment; filename="export.xlsx"'
     else:
         response = HttpResponse('Parameter Format Not Correct')
