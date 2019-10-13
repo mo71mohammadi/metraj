@@ -302,7 +302,10 @@ def export_file(request):
         for record in new_list:
             new_values = []
             for item in list(record.values()):
-                new_values.append(str(item))
+                if type(item) == list:
+                    new_values.append(', '.join(item))
+                else:
+                    new_values.append(str(item))
             ws.append(new_values)
         wb.save('export.xlsx')
         response = FileResponse(open('export.xlsx', 'rb'))
