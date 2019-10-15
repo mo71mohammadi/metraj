@@ -1,4 +1,5 @@
 import csv
+import re
 from functools import reduce
 import operator
 from django.db.models import Q
@@ -40,9 +41,20 @@ def change_data(new_list):
         newObj['name'] = obj['owner_name']
         del obj['owner_name']
         del obj['name']
-        newObj['mobile'] = obj['phone']
+        if not obj['phone2']:
+            obj['phone2'] = ''
+        Phone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone'])
+        Phone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone2'])
+        if Phone:
+            newObj['mobile'] = Phone[0]
+            newObj['phone'] = obj['phone2']
+        elif Phone2:
+            newObj['mobile'] = Phone2[0]
+            newObj['phone'] = obj['phone']
+        else:
+            newObj['mobile'] = ''
+            newObj['phone'] = ''
         del obj['phone']
-        newObj['phone'] = obj['phone2']
         del obj['phone2']
         del obj['owner_phone']
         del obj['owner_phone2']
