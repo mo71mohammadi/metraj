@@ -24,6 +24,86 @@ def change_date(time):
     return time
 
 
+def change_data(new_list):
+    kashano_new_list = []
+    for obj in new_list:
+        newObj = {}
+        newObj['id'] = obj['elead_id']
+        del obj['elead_id']
+        newObj['estate_type_id'] = obj['est_type']
+        del obj['est_type']
+        newObj['region_id'] = obj['area_id']
+        del obj['area_id']
+        newObj['transaction_type_id'] = obj['deal_type']
+        del obj['deal_type']
+        newObj['estate_id'] = ''
+        newObj['name'] = obj['owner_name']
+        del obj['owner_name']
+        newObj['mobile'] = obj['phone']
+        del obj['phone']
+        newObj['phone'] = obj['phone2']
+        del obj['phone2']
+        del obj['owner_phone']
+        del obj['owner_phone2']
+        newObj['address'] = obj['est_address']
+        del obj['est_address']
+        newObj['mortgage_only'] = ''
+        newObj['sale_price'] = obj['price']
+        del obj['price']
+        newObj['mortgage_price'] = obj['price_rahn']
+        del obj['price_rahn']
+        newObj['rent_price'] = obj['price_rent']
+        del obj['price_rent']
+        newObj['description'] = obj['dscr']
+        del obj['dscr']
+        newObj['area'] = obj['size_subs']
+        del obj['size_subs']
+        newObj['age'] = obj['age']
+        del obj['age']
+        newObj['front_length'] = ''
+        newObj['direction'] = obj['direction']
+        del obj['direction']
+        newObj['rooms_count'] = obj['rooms']
+        del obj['rooms']
+        newObj['floors_count'] = obj['floors']
+        del obj['floors']
+        newObj['units_count'] = ''
+        newObj['floor'] = obj['floor']
+        del obj['floor']
+        newObj['total_units_count'] = ''
+        newObj['cover'] = obj['flooring']
+        del obj['flooring']
+        newObj['frontage'] = obj['view_material']
+        del obj['view_material']
+        newObj['wc'] = obj['toilet']
+        del obj['toilet']
+        newObj['kitchen'] = ''
+        newObj['document'] = obj['sanad_stat']
+        del obj['sanad_stat']
+        newObj['habitation'] = obj['fill_stat']
+        del obj['fill_stat']
+        newObj['map'] = str(obj['addr_latitude']) + ', ' + str(obj['addr_longitude'])
+        del obj['addr_latitude']
+        del obj['addr_longitude']
+        newObj['has_modify'] = obj['eslahi']
+        del obj['eslahi']
+        newObj['has_manufacturing_license'] = obj['javaz_sakht']
+        del obj['javaz_sakht']
+        newObj['urban_position'] = ''
+        newObj['has_endofwork'] = ''
+        newObj['sent_at'] = ''
+        newObj['created_at'] = obj['ctime']
+        del obj['ctime']
+        newObj['updated_at'] = obj['utime']
+        del obj['utime']
+        newObj['area_kashano'] = obj['area']
+        del obj['area']
+
+        newObj.update(obj)
+        kashano_new_list.append(newObj)
+    return kashano_new_list
+
+
 @staff_member_required()
 @login_required()
 def home(request):
@@ -76,8 +156,8 @@ def get(request):
                                         elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
                                         phone2=dic['phone2'], est_address=dic['est_address'], est_id=dic['est_id'],
                                         user_id=dic['user_id'], owner_id=dic['owner_id'], owner_name=dic['owner_name'],
-                                        owner_family=dic['owner_phone'], owner_phone2=dic['owner_phone2'],
-                                        area_id=dic['area_id'],
+                                        owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
+                                        owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
                                         state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
                                         deal_type=dic['deal_type'], dependency=dic['dependency'],
                                         update_cap=dic['update_cap'],
@@ -176,7 +256,6 @@ def kashano(request):
                       for filter in filter_names
                       if request.GET.get(filter)]
     if filter_clauses:
-        print(filter_clauses)
         records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
     else:
         records = model.Estate.objects.filter(delete_status=False)
@@ -221,20 +300,19 @@ def view_record(request):
     record_list[0]['fields']['flooring'] = obj_list(floorings)
     record_list[0]['fields']['facilities'] = obj_list(facilities)
     record_list[0]['fields']['tasisat'] = obj_list(tasisats)
-    record_list = json.dumps(record_list[0]['fields'])
+    new = change_data([record_list[0]['fields']])
+    record_list = json.dumps(new[0])
     return HttpResponse(record_list, 'application/json')
 
 
 @staff_member_required()
 @login_required()
 def edit_record(request):
-    print(request.GET.get('id'))
     instance = model.Estate.objects.get(id=request.GET.get('id'))
     form = forms.EstateForm(instance=instance)
     if request.POST:
         form = forms.EstateForm(request.POST, instance=instance)
         if form.is_valid():
-            print('as')
             form.save()
             return redirect("kashano")
         else:
@@ -246,9 +324,7 @@ def edit_record(request):
 @staff_member_required()
 @login_required()
 def delete_record(request):
-    print(request.GET.get('ids'))
     for item in request.GET.get('ids').split(','):
-        print(item)
         model.Estate.objects.filter(id=item).update(delete_status=True)
     return redirect("kashano")
 
@@ -287,68 +363,8 @@ def export_file(request):
         item['fields']['tasisat'] = obj_list(tasisats)
         new_list.append(item['fields'])
 
-    if request.GET.get('sort') == 'metraj':
-        kashano_new_list = []
-        for obj in new_list:
-            newObj = {}
-            newObj['estate_type_id'] = obj['est_type']
-            del obj['est_type']
-            newObj['region_id'] = obj['area_id']
-            del obj['area_id']
-            newObj['name'] = obj['owner_name']
-            del obj['owner_name']
-            newObj['area'] = obj['size_subs']
-            del obj['size_subs']
-            newObj['age'] = obj['age']
-            del obj['age']
-            newObj['direction'] = obj['direction']
-            del obj['direction']
-            newObj['rooms_count'] = obj['rooms']
-            del obj['rooms']
-            newObj['floors_count'] = obj['floors']
-            del obj['floors']
-            newObj['floor'] = obj['floor']
-            del obj['floor']
-            newObj['cover'] = obj['flooring']
-            del obj['flooring']
-            newObj['frontage'] = obj['view_material']
-            del obj['view_material']
-            newObj['wc'] = obj['toilet']
-            del obj['toilet']
-            newObj['document'] = obj['sanad_stat']
-            del obj['sanad_stat']
-            newObj['habitation'] = obj['fill_stat']
-            del obj['fill_stat']
-            newObj['address'] = obj['est_address']
-            del obj['est_address']
-            newObj['map'] = str(obj['addr_latitude']) + ', ' + str(obj['addr_longitude'])
-            del obj['addr_latitude']
-            del obj['addr_longitude']
-            newObj['mobile'] = obj['phone']
-            del obj['phone']
-            newObj['phone'] = obj['phone2']
-            del obj['phone2']
-            newObj['has_modify'] = obj['eslahi']
-            del obj['eslahi']
-            newObj['has_manufacturing_license'] = obj['javaz_sakht']
-            del obj['javaz_sakht']
-            newObj['transaction_type_id'] = obj['deal_type']
-            del obj['deal_type']
-            newObj['sale_price'] = obj['price']
-            del obj['price']
-            newObj['mortgage_price'] = obj['price_rahn']
-            del obj['price_rahn']
-            newObj['rent_price'] = obj['price_rent']
-            del obj['price_rent']
-            newObj['description'] = obj['dscr']
-            del obj['dscr']
-            newObj['created_at'] = obj['ctime']
-            del obj['ctime']
-            newObj['updated_at'] = obj['utime']
-            del obj['utime']
-            newObj.update(obj)
-            kashano_new_list.append(newObj)
-        new_list = kashano_new_list
+    # if request.GET.get('sort') == 'metraj':
+    new_list = change_data(new_list)
 
     if request.GET.get('format') == 'json':
         record_list = json.dumps(new_list)
