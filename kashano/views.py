@@ -25,6 +25,96 @@ def change_date(time):
     return time
 
 
+def change_data(new_list):
+    kashano_new_list = []
+    for obj in new_list:
+        newObj = {}
+        newObj['id'] = obj['id']
+        newObj['estate_type_id'] = obj['est_type']
+        del obj['est_type']
+        newObj['region_id'] = obj['area_id']
+        del obj['area_id']
+        newObj['transaction_type_id'] = obj['deal_type']
+        del obj['deal_type']
+        newObj['estate_id'] = obj['elead_id']
+        del obj['elead_id']
+        newObj['name'] = obj['name']
+        del obj['owner_name']
+        del obj['name']
+        if not obj['phone2']:
+            obj['phone2'] = ''
+        Phone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone'])
+        Phone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone2'])
+        if Phone:
+            newObj['mobile'] = Phone[0]
+            newObj['phone'] = obj['phone2']
+        elif Phone2:
+            newObj['mobile'] = Phone2[0]
+            newObj['phone'] = obj['phone']
+        else:
+            newObj['mobile'] = ''
+            newObj['phone'] = ''
+        del obj['phone']
+        del obj['phone2']
+        del obj['owner_phone']
+        del obj['owner_phone2']
+        newObj['address'] = obj['est_address']
+        del obj['est_address']
+        newObj['sale_price'] = obj['price']
+        del obj['price']
+        newObj['mortgage_price'] = obj['price_rahn']
+        del obj['price_rahn']
+        newObj['rent_price'] = obj['price_rent']
+        del obj['price_rent']
+        newObj['description'] = obj['dscr']
+        del obj['dscr']
+        newObj['area'] = obj['size_subs']
+        del obj['size_subs']
+        newObj['age'] = obj['age']
+        del obj['age']
+        newObj['front_length'] = ''
+        newObj['direction'] = obj['direction']
+        del obj['direction']
+        newObj['rooms_count'] = obj['rooms']
+        del obj['rooms']
+        newObj['floors_count'] = obj['floors']
+        del obj['floors']
+        newObj['units_count'] = ''
+        newObj['floor'] = obj['floor']
+        del obj['floor']
+        newObj['total_units_count'] = ''
+        newObj['cover'] = obj['flooring']
+        del obj['flooring']
+        newObj['frontage'] = obj['view_material']
+        del obj['view_material']
+        newObj['wc'] = obj['toilet']
+        del obj['toilet']
+        newObj['kitchen'] = obj['cabinet']
+        del obj['cabinet']
+        newObj['document'] = obj['sanad_stat']
+        del obj['sanad_stat']
+        newObj['habitation'] = obj['fill_stat']
+        del obj['fill_stat']
+        newObj['map'] = str(obj['addr_latitude']) + ', ' + str(obj['addr_longitude'])
+        del obj['addr_latitude']
+        del obj['addr_longitude']
+        newObj['has_modify'] = obj['eslahi']
+        del obj['eslahi']
+        newObj['has_manufacturing_license'] = obj['javaz_sakht']
+        del obj['javaz_sakht']
+        newObj['urban_position'] = ''
+        newObj['has_endofwork'] = ''
+        newObj['created_at'] = obj['ctime']
+        del obj['ctime']
+        newObj['updated_at'] = obj['utime']
+        del obj['utime']
+        newObj['area_kashano'] = obj['area']
+        del obj['area']
+
+        newObj.update(obj)
+        kashano_new_list.append(newObj)
+    return kashano_new_list
+
 
 @staff_member_required()
 @login_required()
@@ -45,7 +135,7 @@ def get(request):
                 item_count = 0
                 filter_item = model.Estate.objects.filter(deal_type=transaction, est_type=estate)
                 if filter_item:
-                    max_date = filter_item.latest("created_at").created_at
+                    max_date = filter_item.latest("ctime").ctime
                 else:
                     max_date = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=10)
 
@@ -69,44 +159,45 @@ def get(request):
                             dic['elead_id'] = ticket['elead_id']
                             if dic['ctime'] + jdatetime.timedelta(days=1) >= max_date:
                                 print("true")
-                                record = model.Estate.objects.filter(estate_id=ticket['elead_id'])
+                                record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                 if record:
                                     print('record exist')
                                 else:
                                     item_count += 1
                                     newEstate = model.Estate(
-                                        estate_id=dic['elead_id'], name=dic['name'], mobile=dic['phone'],
-                                        phone=dic['phone2'], address=dic['est_address'], est_id=dic['est_id'],
+                                        elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
+                                        phone2=dic['phone2'], est_address=dic['est_address'], est_id=dic['est_id'],
                                         user_id=dic['user_id'], owner_id=dic['owner_id'], owner_name=dic['owner_name'],
                                         owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
-                                        owner_phone2=dic['owner_phone2'], region_id=dic['area_id'],
-                                        state_id=dic['state_id'], city_id=dic['city_id'], estate_type_id=dic['est_type'],
-                                        transaction_type_id=dic['deal_type'], dependency=dic['dependency'],
+                                        owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
+                                        state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
+                                        deal_type=dic['deal_type'], dependency=dic['dependency'],
                                         update_cap=dic['update_cap'],
-                                        created_at=dic['ctime'], updated_at=dic['utime'], dealt_date=dic['dealt_date'],
+                                        ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
                                         addr_area=dic['addr_area'],
                                         addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
                                         addr_plaq=dic['addr_plaq'], addr_unit_no=dic['addr_unit_no'],
-                                        addr_map=dic['addr_map'], map=dic['addr_latitude'] + dic['addr_longitude'],
-                                        area=dic['size_subs'], size=dic['size'], width=dic['width'],
+                                        addr_map=dic['addr_map'], addr_latitude=dic['addr_latitude'],
+                                        addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'],
+                                        size=dic['size'], width=dic['width'],
                                         length=dic['length'], bar=dic['bar'],
-                                        age=dic['age'], rooms_count=dic['rooms'], delete_status=False,
+                                        age=dic['age'], rooms=dic['rooms'], delete_status=False,
                                         floor=dic['floor'], floor_units=dic['floor_units'],
-                                        floors_count=dic['floors'], phone_lines=dic['phone_lines'],
-                                        frontage=dic['view_material'], kitchen=dic['cabinet'],
-                                        price_meter=dic['price_meter'], sale_price=dic['price'],
-                                        price_rahnrent_val=dic['price_rahnrent_val'], mortgage_price=dic['price_rahn'],
-                                        rent_price=dic['price_rent'], rahnrent_exchange=dic['rahnrent_exchange'],
+                                        floors=dic['floors'], phone_lines=dic['phone_lines'],
+                                        view_material=dic['view_material'], cabinet=dic['cabinet'],
+                                        price_meter=dic['price_meter'], price=dic['price'],
+                                        price_rahnrent_val=dic['price_rahnrent_val'], price_rahn=dic['price_rahn'],
+                                        price_rent=dic['price_rent'], rahnrent_exchange=dic['rahnrent_exchange'],
                                         fitfor=dic['fitfor'], fitfor_other=dic['fitfor_other'],
-                                        has_modify=dic['eslahi'], tarakom=dic['tarakom'],
+                                        eslahi=dic['eslahi'], tarakom=dic['tarakom'],
                                         arzegozar=dic['arzegozar'], ceil_height=dic['ceil_height'],
                                         wall_cover=dic['wall_cover'], hesar_type=dic['hesar_type'],
                                         trees_num=dic['trees_num'], trees_type=dic['trees_type'],
                                         trees_age=dic['trees_age'], water_share=dic['water_share'],
-                                        document=dic['sanad_stat'], habitation=dic['fill_stat'],
+                                        sanad_stat=dic['sanad_stat'], fill_stat=dic['fill_stat'],
                                         stat=dic['stat'], tahvil_date=dic['tahvil_date'],
                                         viewable_owner_name=dic['viewable_owner_name'],
-                                        description=dic['dscr'], has_manufacturing_license=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
+                                        dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
                                         default_pic=dic['default_pic'],
                                         is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
                                         water_share_amount=dic['water_share_amount'],
@@ -117,7 +208,7 @@ def get(request):
                                         old_price_rent=dic['old_price_rent'],
                                         old_price_rahnrent_val=dic['old_price_rahnrent_val'],
                                         update_user_id=dic['update_user_id'], old_ctime=dic['old_ctime'],
-                                        area_kashano=dic['area'],
+                                        area=dic['area'],
                                         old_price_dscr=dic['old_price_dscr'],
                                         old_price_meter_dscr=dic['old_price_meter_dscr'],
                                         old_price_rahn_dscr=dic['old_price_rahn_dscr'],
@@ -172,7 +263,7 @@ def get_setting(request):
 @staff_member_required()
 @login_required()
 def kashano(request):
-    filter_names = ('download_status', 'transaction_type_id', 'est_type', 'estate_id', 'name', 'region_id', 'delete_status')
+    filter_names = ('download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
     filter_clauses = [Q(**{filter: request.GET[filter]})
                       for filter in filter_names
                       if request.GET.get(filter)]
@@ -262,11 +353,11 @@ def export_file(request):
         end = request.GET.get('end')
     else:
         end = jdatetime.date.today().togregorian() + jdatetime.timedelta(days=10)
-    filter_names = ('download_status', 'est_type', 'estate_id', 'name', 'region_id', 'delete_status')
+    filter_names = ('download_status', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
     filter_clauses = [Q(**{filter: request.GET[filter]})
                       for filter in filter_names
                       if request.GET.get(filter)]
-    filter_clauses.append(Q(created_at__range=[start, end]))
+    filter_clauses.append(Q(ctime__range=[start, end]))
     record = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
     record_list = serializers.serialize('json', record)
     record_list = json.loads(record_list)
@@ -287,7 +378,7 @@ def export_file(request):
         new_list.append(item['fields'])
 
     # if request.GET.get('sort') == 'metraj':
-    # new_list = change_data(new_list)
+    new_list = change_data(new_list)
 
     if request.GET.get('format') == 'json':
         record_list = json.dumps(new_list)
