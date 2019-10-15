@@ -28,17 +28,18 @@ def change_data(new_list):
     kashano_new_list = []
     for obj in new_list:
         newObj = {}
-        newObj['id'] = obj['elead_id']
-        del obj['elead_id']
+        newObj['id'] = obj['id']
         newObj['estate_type_id'] = obj['est_type']
         del obj['est_type']
         newObj['region_id'] = obj['area_id']
         del obj['area_id']
         newObj['transaction_type_id'] = obj['deal_type']
         del obj['deal_type']
-        newObj['estate_id'] = ''
+        newObj['estate_id'] = obj['elead_id']
+        del obj['elead_id']
         newObj['name'] = obj['owner_name']
         del obj['owner_name']
+        del obj['name']
         newObj['mobile'] = obj['phone']
         del obj['phone']
         newObj['phone'] = obj['phone2']
@@ -47,7 +48,6 @@ def change_data(new_list):
         del obj['owner_phone2']
         newObj['address'] = obj['est_address']
         del obj['est_address']
-        newObj['mortgage_only'] = ''
         newObj['sale_price'] = obj['price']
         del obj['price']
         newObj['mortgage_price'] = obj['price_rahn']
@@ -77,7 +77,8 @@ def change_data(new_list):
         del obj['view_material']
         newObj['wc'] = obj['toilet']
         del obj['toilet']
-        newObj['kitchen'] = ''
+        newObj['kitchen'] = obj['cabinet']
+        del obj['cabinet']
         newObj['document'] = obj['sanad_stat']
         del obj['sanad_stat']
         newObj['habitation'] = obj['fill_stat']
@@ -91,7 +92,6 @@ def change_data(new_list):
         del obj['javaz_sakht']
         newObj['urban_position'] = ''
         newObj['has_endofwork'] = ''
-        newObj['sent_at'] = ''
         newObj['created_at'] = obj['ctime']
         del obj['ctime']
         newObj['updated_at'] = obj['utime']
@@ -300,6 +300,7 @@ def view_record(request):
     record_list[0]['fields']['flooring'] = obj_list(floorings)
     record_list[0]['fields']['facilities'] = obj_list(facilities)
     record_list[0]['fields']['tasisat'] = obj_list(tasisats)
+    record_list[0]['fields']['id'] = request.GET.get('id')
     new = change_data([record_list[0]['fields']])
     record_list = json.dumps(new[0])
     return HttpResponse(record_list, 'application/json')
@@ -361,6 +362,7 @@ def export_file(request):
         item['fields']['flooring'] = obj_list(floorings)
         item['fields']['facilities'] = obj_list(facilities)
         item['fields']['tasisat'] = obj_list(tasisats)
+        item['fields']['id'] = item['pk']
         new_list.append(item['fields'])
 
     # if request.GET.get('sort') == 'metraj':
