@@ -4,22 +4,22 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="column">
-<!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" id="update" data-toggle="modal"-->
-<!--               data-target="#update_modal"><i class="fa fa-plus"> </i> بروزرسانی-->
-<!--            </a>-->
+            <!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" id="update" data-toggle="modal"-->
+            <!--               data-target="#update_modal"><i class="fa fa-plus"> </i> بروزرسانی-->
+            <!--            </a>-->
             <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px;" href="" data-toggle="modal"
                data-target="#filter"> فیلتر </a>
-<!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano"> همه </a>-->
-<!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano?download_status=True"> دانلود-->
-<!--                شده ها </a>-->
-<!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano?delete_status=True"> حذف شده-->
-<!--                ها </a>-->
+            <!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano"> همه </a>-->
+            <!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano?download_status=True"> دانلود-->
+            <!--                شده ها </a>-->
+            <!--            <a class="btn btn-info m-b-5 m-r-2" style="margin-bottom: 7px" href="/kashano?delete_status=True"> حذف شده-->
+            <!--                ها </a>-->
             <a class="btn btn-info m-b-5 m-r-2" data-toggle="modal"
                data-target="#export" style="margin-bottom: 7px;float: left" href=""> خروجی </a>
         </div>
     </div>
     <div class="col-md-12">
-        <div class="portlet box border shadow" >
+        <div class="portlet box border shadow">
             <div class="portlet-heading">
                 <div class="portlet-title">
                     <h3 class="title" style="font-weight: bold">
@@ -77,7 +77,8 @@
                                 <a class="send-modal btn btn-success btn-sm"
                                    href="/kashano/edit?id={{ record.id }}" type="submit"> ویرایش</a>
                                 {% if record.delete_status == False or record.delete_status == None %}
-                                <a class="delete-modal btn btn-danger btn-sm" href="/kashano/delete?ids={{ record.id }}" >حذف
+                                <a class="delete-modal btn btn-danger btn-sm"
+                                   href="/kashano/delete?ids={{ record.id }}">حذف
                                 </a>
                                 {% endif %}
                             </td>
@@ -271,7 +272,7 @@
                                 <label for="deal_type" class="col-sm-4 col-form-label"> دانلود :</label>
                                 <div class="col-sm-8">
                                     <select name="download_status" class="form-control select2 allow-cancel"
-                                            id="download_status" style="width: 200px">
+                                            id="download" style="width: 200px">
                                         <option value="False"> دانلود نشده</option>
                                         <option value="True"> دانلود شده</option>
 
@@ -289,47 +290,54 @@
                                     </select>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
                             <div class="form-group row">
                                 <label for="elead_id" class="col-sm-4 col-form-label">شناسه :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="elead_id" name="elead_id" class="form-control"
-                                           style="width: 150px">
+                                    <input type="text" id="elead_id" value="{{select.elead_id.0}}" name="elead_id"
+                                           class="form-control"
+                                           style="width: 170px">
                                 </div>
 
                             </div>
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label">نام :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="name" name="name" class="form-control" style="width: 150px">
+                                    <input type="text" id="name" name="name" value="{{select.name.0}}"
+                                           class="form-control" style="width: 170px">
                                 </div>
 
                             </div>
                             <div class="form-group row">
                                 <label for="phone" class="col-sm-4 col-form-label">تماس :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="phone" name="phone" class="form-control"
-                                           style="width: 150px">
+                                    <input type="text" id="phone" name="phone" value="{{select.phone.0}}"
+                                           class="form-control"
+                                           style="width: 170px">
                                 </div>
 
                             </div>
                             <div class="form-group row">
                                 <label for="phone2" class="col-sm-4 col-form-label">تماس 2 :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="phone2" name="phone2" class="form-control"
-                                           style="width: 150px">
+                                    <input type="text" id="phone2" name="phone2" value="{{select.phone2.0}}"
+                                           class="form-control"
+                                           style="width: 170px">
                                 </div>
 
                             </div>
                             <div class="form-group row">
-                                <label for="owner_phone" class="col-sm-4 col-form-label">تماس مالک :</label>
+                                <label for="delete_status" class="col-sm-4 col-form-label"> زمان دانلود :</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="owner_phone" name="owner_phone" class="form-control"
-                                           style="width: 150px">
+                                    <select name="download_time" class="form-control select2 allow-cancel"
+                                            id="download_time"
+                                            style="width: 200px">
+                                        {% for item in times %}
+                                        <option value="{{item.download_time}}">{{item.download_time}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -357,26 +365,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <!--# delete modal #-->
@@ -391,11 +379,32 @@
                 $.get("/kashano/delete", {ids: ID});
             })
         })
+
+
+
 </script>
+<input type="hidden" value="{{select.deal_type.0}}" id="select_deal_type">
+<input type="hidden" value="{{select.est_type.0}}" id="select_est_type">
+<input type="hidden" value="{{select.area_id.0}}" id="select_area_id">
+<input type="hidden" value="{{select.download_status.0}}" id="select_download_status">
+<input type="hidden" value="{{select.delete_status.0}}" id="select_delete_status">
+<input type="hidden" value="{{select.download_time.0}}" id="select_download_time">
 <script>
-        $(document).ready(function () {
-            $(".select2").val(null).trigger('change');
-        });
+    $(document).ready(function () {
+        $(".select2").val(null).trigger('change');
+        var deal_type = $('#select_deal_type').val();
+        $("#deal_type").val(deal_type).trigger('change');
+        var est_type = $('#select_est_type').val();
+        $("#est_type").val(est_type).trigger('change');
+        var area_id = $('#select_area_id').val();
+        $("#area_id").val(area_id).trigger('change');
+        var download_status = $('#select_download_status').val();
+        $("#download").val(download_status).trigger('change');
+        var delete_status = $('#select_delete_status').val();
+        $("#delete_status").val(delete_status).trigger('change');
+        var download_time = $('#select_download_time').val();
+        $("#download_time").val(download_time).trigger('change');
+    });
 </script>
 
 {% endblock %}

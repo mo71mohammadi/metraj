@@ -1,4 +1,5 @@
 import csv
+import datetime
 import re
 from functools import reduce
 import operator
@@ -125,6 +126,8 @@ def home(request):
 @staff_member_required()
 @login_required()
 def get(request):
+    download_time = jdatetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(download_time)
     settings = model.Setting.objects.filter()
     update_count = {}
     for setting in settings:
@@ -172,7 +175,7 @@ def get(request):
                                         owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
                                         state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
                                         deal_type=dic['deal_type'], dependency=dic['dependency'],
-                                        update_cap=dic['update_cap'],
+                                        update_cap=dic['update_cap'], download_time=download_time,
                                         ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
                                         addr_area=dic['addr_area'],
                                         addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
@@ -263,14 +266,24 @@ def get_setting(request):
 @staff_member_required()
 @login_required()
 def kashano(request):
-    filter_names = ('download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
+    select = dict(request.GET)
+    times = model.Estate.objects.values('download_time').distinct()
+    if request.GET.get('start'):
+        start = request.GET.get('start')
+    else:
+        start = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=2650)
+    if request.GET.get('end'):
+        end = request.GET.get('end')
+    else:
+        end = jdatetime.date.today().togregorian() + jdatetime.timedelta(days=10)
+
+    filter_names = (
+        'download_status', 'deal_type', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status', 'download_time')
     filter_clauses = [Q(**{filter: request.GET[filter]})
                       for filter in filter_names
                       if request.GET.get(filter)]
-    if filter_clauses:
-        records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
-    else:
-        records = model.Estate.objects.filter(delete_status=False)
+    filter_clauses.append(Q(ctime__range=[start, end]))
+    records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
 
     Session = requests.session()
     setting = model.Setting.objects.get(name='kashano')
@@ -286,7 +299,8 @@ def kashano(request):
                     areas.append([result['area_id'], result['text']])
     paginator = Paginator(records, 300)
     records = paginator.get_page(request.GET.get('page'))
-    return render(request, 'kashano.html', {'records': records, "areas": areas})
+    print(jdatetime.datetime.now())
+    return render(request, 'kashano.html', {'records': records, "areas": areas, "select": select, "times": times})
 
 
 def obj_list(name):

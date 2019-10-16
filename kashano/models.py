@@ -30,6 +30,7 @@ class Estate(models.Model):
     ctime = models.DateField(null=True, blank=True)
     utime = models.CharField(max_length=50, null=True, blank=True)
 
+    download_time = models.CharField(max_length=100, null=True, blank=True)
     download_status = models.BooleanField(default=False, null=True, blank=True)
     delete_status = models.BooleanField(default=False, null=True, blank=True)
     name = models.CharField(max_length=50, null=True, blank=True)
