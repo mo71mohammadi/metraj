@@ -1,0 +1,101 @@
+1. mysql
+install mysql:
+sudo apt-get update
+sudo apt-get install mysql-server -y
+
+create DataBase:
+sudo mysql -u root -p
+CREATE DATABASE DBNAME;
+
+set Charset:
+nano .my.cnf
+add:
+[client]
+user=root
+password=""
+
+Ctrl+X, type y to save the file
+Replace DBNAME with the database name and run Command:
+sudo mysql --database=DBNAME -B -N -e "SHOW TABLES" | awk '{print "SET foreign_key_checks = 0; ALTER TABLE", $1, "CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci; SET foreign_key_checks = 1; "}' | sudo mysql –database=DBNAME
+sudo mysql
+ALTER DATABASE DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;
+exit;
+rm .my.cnf
+
+SET User PASSWORD:
+sudo mysql -u root -p
+USE mysql;
+UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+FLUSH PRIVILEGES;
+exit;
+sudo mysql_secure_installation 
+
+
+2. Install conda:
+
+download and install conda
+download url: https://docs.conda.io/en/latest/miniconda.html
+conda install: dir file download ---> open terminal ---> bash Miniconda3-latest-Linux-x86_64.sh
+
+run conda:
+conda activate
+
+3. install required Package:
+pip install django
+pip install jdatetime
+pip install openpyxl
+
+install mysqlclient:
+conda install -c bioconda mysqlclient 
+
+4. clone repositories
+install git:
+sudo apt install git
+
+git clone https://gitlab.fxpart.com/metraj/products/metraj_data_django.git
+user: mojtaba
+pass: 09174774498
+
+
+project Setting:
+cd metraj_data_django
+unzip static.zip
+cd metraj
+rename setting.py file to settings.py
+open settings.py and set database user & password
+
+cd ..
+cd kashano 
+rename migration to migrations
+
+migrate:
+python manage.py makemigrations
+python manage.py migrate
+
+set login user & pass:
+python manage.py createsuperuser
+
+run project:
+python manage.py runserver
+
+5. install nginx
+sudo apt install nginx
+sudo nano /etc/nginx/nginx.conf
+
+add this section to http section: 
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        proxy_pass "http://127.0.0.1:8000";
+    }
+
+sudo systemctl reload nginx
+
+
+
+
+
+
+
