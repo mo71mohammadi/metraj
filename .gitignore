@@ -165,6 +165,7 @@ kashano/kashano.json
 .idea/
 temp/
 one/
+static/
 metraj/settings.py
 kashano/migrations
 # Gradle and Maven with auto-import
