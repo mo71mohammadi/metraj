@@ -42,19 +42,57 @@ def change_data(new_list):
         newObj['name'] = obj['name']
         del obj['owner_name']
         del obj['name']
-        if not obj['phone2']:
-            obj['phone2'] = ''
-        Phone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone'])
-        Phone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone2'])
-        if Phone:
-            newObj['mobile'] = Phone[0]
-            newObj['phone'] = obj['phone2']
-        elif Phone2:
-            newObj['mobile'] = Phone2[0]
-            newObj['phone'] = obj['phone']
+        phones = []
+        if obj['phone']:
+            phones.append(obj['phone'])
+        if obj['phone2']:
+            phones.append(obj['phone2'])
+        if obj['owner_phone']:
+            phones.append(obj['owner_phone'])
+        if obj['owner_phone2']:
+            phones.append(obj['owner_phone2'])
+
+        mobiles = []
+        homes = []
+        for phone in list(set(phones)):
+            print(phone)
+            mobile = re.search(r'''^[9]\d{9}|^[0]\d{10}''', phone)
+            if mobile:
+                mobiles.append(mobile[0])
+            else:
+                homes.append(phone)
+        print(phones, mobiles, homes)
+        if len(mobiles) > 0:
+            newObj['mobile'] = mobiles[0]
+            if len(mobiles) > 1:
+                newObj['phone'] = mobiles[1]
+            elif len(homes) > 0:
+                newObj['phone'] = homes[0]
+            else:
+                newObj['phone'] = ''
+        elif len(homes) > 0:
+            newObj['mobile'] = homes[0]
+            if len(homes) > 1:
+                newObj['phone'] = homes[1]
+            else:
+                newObj['phone'] = ''
         else:
             newObj['mobile'] = ''
             newObj['phone'] = ''
+
+        # if not obj['phone2']:
+        #     obj['phone2'] = ''
+        # Phone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone'])
+        # Phone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone2'])
+        # if Phone:
+        #     newObj['mobile'] = Phone[0]
+        #     newObj['phone'] = obj['phone2']
+        # elif Phone2:
+        #     newObj['mobile'] = Phone2[0]
+        #     newObj['phone'] = obj['phone']
+        # else:
+        #     newObj['mobile'] = ''
+        #     newObj['phone'] = ''
         del obj['phone']
         del obj['phone2']
         del obj['owner_phone']
