@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'metraj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mojtaba',
+        'NAME': 'metraj',
         'USER': 'root',
         'PASSWORD': 'new-password',
         'HOST': '/var/run/mysqld/mysqld.sock',   # mysql_config --socket
