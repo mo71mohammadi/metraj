@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.shortcuts import render
 import ast
 import jdatetime
+import datetime
 import requests
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
@@ -24,6 +25,12 @@ def change_date(time):
     time = time.split('-')
     time = jdatetime.date(int(time[0]), int(time[1]), int(time[2])).togregorian()
     return time
+
+
+#
+# def data_import(request):
+#     open('/kashano.json')
+#     return render(request, )
 
 
 def change_data(new_list):
@@ -61,7 +68,6 @@ def change_data(new_list):
                 mobiles.append(mobile[0])
             else:
                 homes.append(phone)
-        print(phones, mobiles, homes)
         if len(mobiles) > 0:
             newObj['mobile'] = mobiles[0]
             if len(mobiles) > 1:
@@ -79,20 +85,6 @@ def change_data(new_list):
         else:
             newObj['mobile'] = ''
             newObj['phone'] = ''
-
-        # if not obj['phone2']:
-        #     obj['phone2'] = ''
-        # Phone = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone'])
-        # Phone2 = re.search(r'''^[9]\d{9}|^[0]\d{10}''', obj['phone2'])
-        # if Phone:
-        #     newObj['mobile'] = Phone[0]
-        #     newObj['phone'] = obj['phone2']
-        # elif Phone2:
-        #     newObj['mobile'] = Phone2[0]
-        #     newObj['phone'] = obj['phone']
-        # else:
-        #     newObj['mobile'] = ''
-        #     newObj['phone'] = ''
         del obj['phone']
         del obj['phone2']
         del obj['owner_phone']
@@ -165,117 +157,188 @@ def home(request):
 @login_required()
 def get(request):
     download_time = jdatetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(download_time)
+
     settings = model.Setting.objects.filter()
     update_count = {}
-    for setting in settings:
-        Session = requests.session()
-        Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
-        for transaction in ast.literal_eval(setting.transactions):
-            for estate in ast.literal_eval(setting.estates):
-                item_count = 0
-                filter_item = model.Estate.objects.filter(deal_type=transaction, est_type=estate)
-                if filter_item:
-                    max_date = filter_item.latest("ctime").ctime
-                else:
-                    max_date = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=10)
+    start = request.GET.get('start')
+    if start:
+        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        end = datetime.datetime.strptime(request.GET.get('end'), "%Y-%m-%d").date()
 
-                data = {'est_type': estate, 'deal_type': transaction}
-                levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
-                breakNum = 0
-                for page in range(1, 5):
-                    print(transaction, estate, page)
-                    url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
-                    data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
-                    levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
-                    if levelTwo.json()['items']:
-                        for ticket in levelTwo.json()['items']:
-                            data = {'elead_id': ticket['elead_id']}
-                            levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
-                            while not levelThree.text:
+        for setting in settings:
+            Session = requests.session()
+            Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+            for transaction in ast.literal_eval(setting.transactions):
+                for estate in ast.literal_eval(setting.estates):
+                    new = 0
+                    repeat = 0
+                    update = 0
+                    data = {'est_type': estate, 'deal_type': transaction}
+                    levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
+                    breakNum = 0
+                    for page in range(1, 500000):
+                        print(transaction, estate, page)
+                        url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
+                        data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
+                        levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
+                        if levelTwo.json()['items']:
+                            for ticket in levelTwo.json()['items']:
+                                data = {'elead_id': ticket['elead_id']}
                                 levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
-                            dic = levelThree.json()
-                            new_time = change_date(dic['ctime'])
-                            dic['ctime'] = new_time
-                            dic['elead_id'] = ticket['elead_id']
-                            if dic['ctime'] + jdatetime.timedelta(days=1) >= max_date:
-                                print("true")
-                                record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
-                                if record:
-                                    print('record exist')
-                                else:
-                                    item_count += 1
-                                    newEstate = model.Estate(
-                                        elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
-                                        phone2=dic['phone2'], est_address=dic['est_address'], est_id=dic['est_id'],
-                                        user_id=dic['user_id'], owner_id=dic['owner_id'], owner_name=dic['owner_name'],
-                                        owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
-                                        owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
-                                        state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
-                                        deal_type=dic['deal_type'], dependency=dic['dependency'],
-                                        update_cap=dic['update_cap'], download_time=download_time,
-                                        ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
-                                        addr_area=dic['addr_area'],
-                                        addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
-                                        addr_plaq=dic['addr_plaq'], addr_unit_no=dic['addr_unit_no'],
-                                        addr_map=dic['addr_map'], addr_latitude=dic['addr_latitude'],
-                                        addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'],
-                                        size=dic['size'], width=dic['width'],
-                                        length=dic['length'], bar=dic['bar'],
-                                        age=dic['age'], rooms=dic['rooms'], delete_status=False,
-                                        floor=dic['floor'], floor_units=dic['floor_units'],
-                                        floors=dic['floors'], phone_lines=dic['phone_lines'],
-                                        view_material=dic['view_material'], cabinet=dic['cabinet'],
-                                        price_meter=dic['price_meter'], price=dic['price'],
-                                        price_rahnrent_val=dic['price_rahnrent_val'], price_rahn=dic['price_rahn'],
-                                        price_rent=dic['price_rent'], rahnrent_exchange=dic['rahnrent_exchange'],
-                                        fitfor=dic['fitfor'], fitfor_other=dic['fitfor_other'],
-                                        eslahi=dic['eslahi'], tarakom=dic['tarakom'],
-                                        arzegozar=dic['arzegozar'], ceil_height=dic['ceil_height'],
-                                        wall_cover=dic['wall_cover'], hesar_type=dic['hesar_type'],
-                                        trees_num=dic['trees_num'], trees_type=dic['trees_type'],
-                                        trees_age=dic['trees_age'], water_share=dic['water_share'],
-                                        sanad_stat=dic['sanad_stat'], fill_stat=dic['fill_stat'],
-                                        stat=dic['stat'], tahvil_date=dic['tahvil_date'],
-                                        viewable_owner_name=dic['viewable_owner_name'],
-                                        dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
-                                        default_pic=dic['default_pic'],
-                                        is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
-                                        water_share_amount=dic['water_share_amount'],
-                                        water_share_unit=dic['water_share_unit'],
-                                        water_share_inunit=dic['water_share_inunit'], pickup_num=dic['pickup_num'],
-                                        is_hot=dic['is_hot'], old_price=dic['old_price'],
-                                        old_price_meter=dic['old_price_meter'], old_price_rahn=dic['old_price_rahn'],
-                                        old_price_rent=dic['old_price_rent'],
-                                        old_price_rahnrent_val=dic['old_price_rahnrent_val'],
-                                        update_user_id=dic['update_user_id'], old_ctime=dic['old_ctime'],
-                                        area=dic['area'],
-                                        old_price_dscr=dic['old_price_dscr'],
-                                        old_price_meter_dscr=dic['old_price_meter_dscr'],
-                                        old_price_rahn_dscr=dic['old_price_rahn_dscr'],
-                                        old_price_rent_dscr=dic['old_price_rent_dscr'],
-                                        old_price_rahnrent_val_dscr=dic['old_price_rahnrent_val_dscr']
-                                    )
-                                    newEstate.save()
-                                    for item in dic['direction']:
-                                        model.Direction(estate=newEstate, name=item).save()
-                                    for item in dic['toilet']:
-                                        model.Toilet(estate=newEstate, name=item).save()
-                                    for item in dic['flooring']:
-                                        model.Flooring(estate=newEstate, name=item).save()
-                                    for item in dic['facilities']:
-                                        model.Facilities(estate=newEstate, name=item).save()
-                                    for item in dic['tasisat']:
-                                        model.Tasisat(estate=newEstate, name=item).save()
-                            else:
-                                breakNum = 1
-                    else:
-                        break
-                    if breakNum == 1:
-                        break
-                update_count[transaction + ' ' + estate] = item_count
+                                while not levelThree.text:
+                                    levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
+                                dic = levelThree.json()
 
-    return HttpResponse(json.dumps(update_count), 'application/json')
+                                new_time = change_date(dic['ctime'])
+
+                                dic['elead_id'] = ticket['elead_id']
+                                dic['ctime'] = new_time
+                                if start <= new_time <= end:
+                                    record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
+                                    if record:
+                                        repeat += 1
+                                        # print('record exist')
+                                        # print(record[0].utime)
+                                        # print(dic['utime'])
+                                        if record[0].utime != dic['utime']:
+                                            update += 1
+                                            print(record[0].elead_id, record[0].id)
+                                            record.update(
+                                                elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
+                                                phone2=dic['phone2'], est_address=dic['est_address'],
+                                                est_id=dic['est_id'],
+                                                user_id=dic['user_id'], owner_id=dic['owner_id'],
+                                                owner_name=dic['owner_name'],
+                                                owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
+                                                owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
+                                                state_id=dic['state_id'], city_id=dic['city_id'],
+                                                est_type=dic['est_type'],
+                                                deal_type=dic['deal_type'], dependency=dic['dependency'],
+                                                update_cap=dic['update_cap'], download_time=download_time,
+                                                ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
+                                                addr_area=dic['addr_area'],
+                                                addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
+                                                addr_plaq=dic['addr_plaq'], addr_unit_no=dic['addr_unit_no'],
+                                                addr_map=dic['addr_map'], addr_latitude=dic['addr_latitude'],
+                                                addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'],
+                                                size=dic['size'], width=dic['width'],
+                                                length=dic['length'], bar=dic['bar'],
+                                                age=dic['age'], rooms=dic['rooms'], delete_status=False,
+                                                floor=dic['floor'], floor_units=dic['floor_units'],
+                                                floors=dic['floors'], phone_lines=dic['phone_lines'],
+                                                view_material=dic['view_material'], cabinet=dic['cabinet'],
+                                                price_meter=dic['price_meter'], price=dic['price'],
+                                                price_rahnrent_val=dic['price_rahnrent_val'],
+                                                price_rahn=dic['price_rahn'],
+                                                price_rent=dic['price_rent'],
+                                                rahnrent_exchange=dic['rahnrent_exchange'],
+                                                fitfor=dic['fitfor'], fitfor_other=dic['fitfor_other'],
+                                                eslahi=dic['eslahi'], tarakom=dic['tarakom'],
+                                                arzegozar=dic['arzegozar'], ceil_height=dic['ceil_height'],
+                                                wall_cover=dic['wall_cover'], hesar_type=dic['hesar_type'],
+                                                trees_num=dic['trees_num'], trees_type=dic['trees_type'],
+                                                trees_age=dic['trees_age'], water_share=dic['water_share'],
+                                                sanad_stat=dic['sanad_stat'], fill_stat=dic['fill_stat'],
+                                                stat=dic['stat'], tahvil_date=dic['tahvil_date'],
+                                                viewable_owner_name=dic['viewable_owner_name'],
+                                                dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'],
+                                                pic_nums=dic['pic_nums'],
+                                                default_pic=dic['default_pic'],
+                                                is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
+                                                water_share_amount=dic['water_share_amount'],
+                                                water_share_unit=dic['water_share_unit'],
+                                                water_share_inunit=dic['water_share_inunit'],
+                                                pickup_num=dic['pickup_num'],
+                                                is_hot=dic['is_hot'], old_price=dic['old_price'],
+                                                old_price_meter=dic['old_price_meter'],
+                                                old_price_rahn=dic['old_price_rahn'],
+                                                old_price_rent=dic['old_price_rent'],
+                                                old_price_rahnrent_val=dic['old_price_rahnrent_val'],
+                                                update_user_id=dic['update_user_id'], old_ctime=dic['old_ctime'],
+                                                area=dic['area'],
+                                                old_price_dscr=dic['old_price_dscr'],
+                                                old_price_meter_dscr=dic['old_price_meter_dscr'],
+                                                old_price_rahn_dscr=dic['old_price_rahn_dscr'],
+                                                old_price_rent_dscr=dic['old_price_rent_dscr'],
+                                                old_price_rahnrent_val_dscr=dic['old_price_rahnrent_val_dscr']
+                                            )
+                                    else:
+                                        new += 1
+                                        newEstate = model.Estate(
+                                            elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
+                                            phone2=dic['phone2'], est_address=dic['est_address'], est_id=dic['est_id'],
+                                            user_id=dic['user_id'], owner_id=dic['owner_id'],
+                                            owner_name=dic['owner_name'],
+                                            owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
+                                            owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
+                                            state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
+                                            deal_type=dic['deal_type'], dependency=dic['dependency'],
+                                            update_cap=dic['update_cap'], download_time=download_time,
+                                            ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
+                                            addr_area=dic['addr_area'],
+                                            addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
+                                            addr_plaq=dic['addr_plaq'], addr_unit_no=dic['addr_unit_no'],
+                                            addr_map=dic['addr_map'], addr_latitude=dic['addr_latitude'],
+                                            addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'],
+                                            size=dic['size'], width=dic['width'],
+                                            length=dic['length'], bar=dic['bar'],
+                                            age=dic['age'], rooms=dic['rooms'], delete_status=False,
+                                            floor=dic['floor'], floor_units=dic['floor_units'],
+                                            floors=dic['floors'], phone_lines=dic['phone_lines'],
+                                            view_material=dic['view_material'], cabinet=dic['cabinet'],
+                                            price_meter=dic['price_meter'], price=dic['price'],
+                                            price_rahnrent_val=dic['price_rahnrent_val'], price_rahn=dic['price_rahn'],
+                                            price_rent=dic['price_rent'], rahnrent_exchange=dic['rahnrent_exchange'],
+                                            fitfor=dic['fitfor'], fitfor_other=dic['fitfor_other'],
+                                            eslahi=dic['eslahi'], tarakom=dic['tarakom'],
+                                            arzegozar=dic['arzegozar'], ceil_height=dic['ceil_height'],
+                                            wall_cover=dic['wall_cover'], hesar_type=dic['hesar_type'],
+                                            trees_num=dic['trees_num'], trees_type=dic['trees_type'],
+                                            trees_age=dic['trees_age'], water_share=dic['water_share'],
+                                            sanad_stat=dic['sanad_stat'], fill_stat=dic['fill_stat'],
+                                            stat=dic['stat'], tahvil_date=dic['tahvil_date'],
+                                            viewable_owner_name=dic['viewable_owner_name'],
+                                            dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
+                                            default_pic=dic['default_pic'],
+                                            is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
+                                            water_share_amount=dic['water_share_amount'],
+                                            water_share_unit=dic['water_share_unit'],
+                                            water_share_inunit=dic['water_share_inunit'], pickup_num=dic['pickup_num'],
+                                            is_hot=dic['is_hot'], old_price=dic['old_price'],
+                                            old_price_meter=dic['old_price_meter'],
+                                            old_price_rahn=dic['old_price_rahn'],
+                                            old_price_rent=dic['old_price_rent'],
+                                            old_price_rahnrent_val=dic['old_price_rahnrent_val'],
+                                            update_user_id=dic['update_user_id'], old_ctime=dic['old_ctime'],
+                                            area=dic['area'],
+                                            old_price_dscr=dic['old_price_dscr'],
+                                            old_price_meter_dscr=dic['old_price_meter_dscr'],
+                                            old_price_rahn_dscr=dic['old_price_rahn_dscr'],
+                                            old_price_rent_dscr=dic['old_price_rent_dscr'],
+                                            old_price_rahnrent_val_dscr=dic['old_price_rahnrent_val_dscr']
+                                        )
+                                        newEstate.save()
+                                        for item in dic['direction']:
+                                            model.Direction(estate=newEstate, name=item).save()
+                                        for item in dic['toilet']:
+                                            model.Toilet(estate=newEstate, name=item).save()
+                                        for item in dic['flooring']:
+                                            model.Flooring(estate=newEstate, name=item).save()
+                                        for item in dic['facilities']:
+                                            model.Facilities(estate=newEstate, name=item).save()
+                                        for item in dic['tasisat']:
+                                            model.Tasisat(estate=newEstate, name=item).save()
+                                else:
+                                    breakNum = 1
+                                    break
+                        else:
+                            break
+                        if breakNum == 1:
+                            break
+                    update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat-update}
+        return HttpResponse(json.dumps(update_count), 'application/json')
+
+    return render(request, 'get.html',)
 
 
 @staff_member_required()
@@ -309,7 +372,7 @@ def kashano(request):
     if request.GET.get('start'):
         start = request.GET.get('start')
     else:
-        start = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=2650)
+        start = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=26500)
     if request.GET.get('end'):
         end = request.GET.get('end')
     else:

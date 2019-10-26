@@ -1,0 +1,78 @@
+{% extends "blank.html" %}
+{% block content %}
+<div class="row">
+    <!-- BEGIN BREADCRUMB -->
+    <div class="col-md-12" style="margin-top: 40px;">
+        <div class="portlet box border shadow">
+            <div class="portlet-heading">
+                <div class="portlet-title">
+                    <h3 class="title" style="font-weight: bold">
+                        <i class="icon-settings"></i>
+                        تنظیمات دریافت
+                    </h3>
+                </div><!-- /.portlet-title -->
+                <div class="buttons-box">
+                    <div class="code-modal hide">
+                    </div>
+                    <a class="btn btn-sm btn-default btn-round btn-fullscreen" rel="tooltip" title="تمام صفحه"
+                       href="#">
+                        <i class="icon-size-fullscreen"></i>
+                    </a>
+                    <a class="btn btn-sm btn-default btn-round btn-collapse" rel="tooltip" title="کوچک کردن"
+                       href="#">
+                        <i class="icon-arrow-up"></i>
+                    </a>
+                </div><!-- /.buttons-box -->
+            </div><!-- /.portlet-heading -->
+            <div class="portlet-body" style="direction: ltr">
+                <form action="" method="get">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="start" class="col-sm-3 col-form-label"> تاریخ شروع </label>
+                                <div class="col-sm-8">
+                                    <input type="date" name="start" id="start" class="form-control"
+                                           style="width: 200px">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="end" class="col-sm-3 col-form-label"> تاریخ پایان </label>
+                                <div class="col-sm-8">
+                                    <input type="date" name="end" id="end" class="form-control" style="width: 200px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success"> دریافت</button>
+                </form>
+            </div><!-- /.portlet-body -->
+        </div><!-- /.portlet -->
+    </div><!-- /.col-md-12 -->
+</div><!-- /.row -->
+
+<input type="hidden" value="{% for setting in settings %}{{ setting.transactions }}{% endfor %}" id="transaction">
+<input type="hidden" value="{% for setting in settings %}{{ setting.estates }}{% endfor %}" id="estate">
+
+
+<script>
+        $(document).ready(function () {
+            var transaction = $('#transaction').val();
+            var estate = $('#estate').val();
+            var tranList = [];
+            var estateList = [];
+            $.each(transaction.slice(1, -1).split(","), function (index, data) {
+                tranList.push(data.trim().slice(1, -1))
+            });
+            $.each(estate.slice(1, -1).split(","), function (index, data) {
+                estateList.push(data.trim().slice(1, -1))
+            });
+            $('#transactions').val(tranList).trigger('change');
+            $('#estates').val(estateList).trigger('change');
+        })
+
+
+</script>
+
+
+{% endblock %}
+
