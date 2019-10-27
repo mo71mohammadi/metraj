@@ -193,6 +193,7 @@ def get(request):
 
                                 dic['elead_id'] = ticket['elead_id']
                                 dic['ctime'] = new_time
+
                                 if start <= new_time <= end:
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
@@ -328,9 +329,12 @@ def get(request):
                                             model.Facilities(estate=newEstate, name=item).save()
                                         for item in dic['tasisat']:
                                             model.Tasisat(estate=newEstate, name=item).save()
+                                elif end < new_time:
+                                    print('a')
                                 else:
                                     breakNum = 1
                                     break
+
                         else:
                             break
                         if breakNum == 1:
@@ -387,8 +391,8 @@ def kashano(request):
     records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
 
     Session = requests.session()
-    setting = model.Setting.objects.get(name='kashano')
-    login = Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+    setting = model.Setting.objects.filter(name='kashano')
+    login = Session.post('http://www.kashano.ir/user/login', data={'user': setting[0].username, 'pass': setting[0].password})
     homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
     areas = []
     for item in homes.json():
@@ -398,7 +402,7 @@ def kashano(request):
             for result in item['childs']:
                 if not (result['area_id'] in areas):
                     areas.append([result['area_id'], result['text']])
-    paginator = Paginator(records, 300)
+    paginator = Paginator(records, 10)
     records = paginator.get_page(request.GET.get('page'))
     print(jdatetime.datetime.now())
     return render(request, 'kashano.html', {'records': records, "areas": areas, "select": select, "times": times})

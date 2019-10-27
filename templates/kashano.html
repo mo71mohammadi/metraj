@@ -57,7 +57,7 @@
                             </th>
                             <th class="th-sm">آدرس
                             </th>
-                            <th class="th-sm">وضعیت
+                            <th class="th-sm" style="width: 100px">وضعیت
                             </th>
                         </tr>
                         </thead>
@@ -77,9 +77,9 @@
                                 <a class="send-modal btn btn-success btn-sm"
                                    href="/kashano/edit?id={{ record.id }}" type="submit"> ویرایش</a>
                                 {% if record.delete_status == False or record.delete_status == None %}
-                                <a class="delete-modal btn btn-danger btn-sm"
-                                   href="/kashano/delete?ids={{ record.id }}">حذف
-                                </a>
+<!--                                <a class="delete-modal btn btn-danger btn-sm"-->
+<!--                                   href="/kashano/delete?ids={{ record.id }}">حذف-->
+<!--                                </a>-->
                                 {% endif %}
                             </td>
                         </tr>
