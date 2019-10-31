@@ -27,17 +27,82 @@ def change_date(time):
     return time
 
 
-#
-# def data_import(request):
-#     open('/kashano.json')
-#     return render(request, )
+def data_import(request):
+    download_time = jdatetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    file = open('kashano/kashano.json')
+    for dic in file:
+        dic = json.loads(dic)
+        new_time = change_date(dic['ctime'])
+        dic['ctime'] = new_time
+        record = model.Estate.objects.filter(elead_id=dic['elead_id'])
+        if record:
+            print('hast')
+        else:
+            newEstate = model.Estate(
+                elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
+                phone2=dic['phone2'], est_address=dic['est_address'], est_id=dic['est_id'],
+                user_id=dic['user_id'], owner_id=dic['owner_id'], download_time=download_time,
+                owner_name=dic['owner_name'], owner_family=dic['owner_family'], owner_phone=dic['owner_phone'],
+                owner_phone2=dic['owner_phone2'], area_id=dic['area_id'],
+                state_id=dic['state_id'], city_id=dic['city_id'], est_type=dic['est_type'],
+                deal_type=dic['deal_type'], dependency=dic['dependency'],
+                update_cap=dic['update_cap'], ctime=dic['ctime'], utime=dic['utime'], dealt_date=dic['dealt_date'],
+                addr_area=dic['addr_area'], addr_generic=dic['addr_generic'], addr_private=dic['addr_private'],
+                addr_plaq=dic['addr_plaq'], addr_unit_no=dic['addr_unit_no'], addr_map=dic['addr_map'],
+                addr_latitude=dic['addr_latitude'],
+                addr_longitude=dic['addr_longitude'], size_subs=dic['size_subs'], size=dic['size'], width=dic['width'],
+                length=dic['length'], bar=dic['bar'], age=dic['age'], rooms=dic['rooms'], delete_status=False,
+                floor=dic['floor'], floor_units=dic['floor_units'], floors=dic['floors'],
+                phone_lines=dic['phone_lines'],
+                view_material=dic['view_material'], cabinet=dic['cabinet'], price_meter=dic['price_meter'],
+                price=dic['price'], price_rahnrent_val=dic['price_rahnrent_val'], price_rahn=dic['price_rahn'],
+                price_rent=dic['price_rent'],
+                rahnrent_exchange=dic['rahnrent_exchange'], fitfor=dic['fitfor'], fitfor_other=dic['fitfor_other'],
+                eslahi=dic['eslahi'], tarakom=dic['tarakom'], arzegozar=dic['arzegozar'],
+                ceil_height=dic['ceil_height'],
+                wall_cover=dic['wall_cover'], hesar_type=dic['hesar_type'],
+                trees_num=dic['trees_num'], trees_type=dic['trees_type'],
+                trees_age=dic['trees_age'], water_share=dic['water_share'],
+                sanad_stat=dic['sanad_stat'], fill_stat=dic['fill_stat'],
+                stat=dic['stat'], tahvil_date=dic['tahvil_date'],
+                viewable_owner_name=dic['viewable_owner_name'],
+                dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
+                is_updates=dic['is_updates'],
+                water_share_amount=dic['water_share_amount'],
+                water_share_unit=dic['water_share_unit'],
+                water_share_inunit=dic['water_share_inunit'], pickup_num=dic['pickup_num'],
+                is_hot=dic['is_hot'], old_price=dic['old_price'],
+                old_price_meter=dic['old_price_meter'],
+                old_price_rahn=dic['old_price_rahn'],
+                old_price_rent=dic['old_price_rent'],
+                old_price_rahnrent_val=dic['old_price_rahnrent_val'],
+                update_user_id=dic['update_user_id'], old_ctime=dic['old_ctime'],
+                area=dic['area'],
+                old_price_dscr=dic['old_price_dscr'],
+                old_price_meter_dscr=dic['old_price_meter_dscr'],
+                old_price_rahn_dscr=dic['old_price_rahn_dscr'],
+                old_price_rent_dscr=dic['old_price_rent_dscr'],
+                old_price_rahnrent_val_dscr=dic['old_price_rahnrent_val_dscr']
+            )
+            newEstate.save()
+            for item in dic['direction']:
+                model.Direction(estate=newEstate, name=item).save()
+            for item in dic['toilet']:
+                model.Toilet(estate=newEstate, name=item).save()
+            for item in dic['flooring']:
+                model.Flooring(estate=newEstate, name=item).save()
+            for item in dic['facilities']:
+                model.Facilities(estate=newEstate, name=item).save()
+            for item in dic['tasisat']:
+                model.Tasisat(estate=newEstate, name=item).save()
+    return HttpResponse('anjam shod')
 
 
 def change_data(new_list):
     kashano_new_list = []
     for obj in new_list:
         newObj = {}
-        newObj['id'] = obj['id']
+        # newObj['id'] = obj['id']
         newObj['estate_type_id'] = obj['est_type']
         del obj['est_type']
         newObj['region_id'] = obj['area_id']
@@ -139,8 +204,39 @@ def change_data(new_list):
         del obj['ctime']
         newObj['updated_at'] = obj['utime']
         del obj['utime']
-        newObj['area_kashano'] = obj['area']
+        # newObj['area_kashano'] = obj['area']
         del obj['area']
+        del obj['delete_status']
+        del obj['user_id']
+        del obj['owner_id']
+        del obj['state_id']
+        del obj['update_cap']
+        del obj['addr_area']
+        del obj['addr_generic']
+        del obj['addr_private']
+        del obj['addr_plaq']
+        del obj['addr_unit_no']
+        del obj['addr_map']
+        del obj['price_meter']
+        del obj['viewable_owner_name']
+        del obj['pic_nums']
+        del obj['default_pic']
+        del obj['is_updates']
+        del obj['edited_fields']
+        del obj['pickup_num']
+        del obj['is_hot']
+        del obj['old_price']
+        del obj['old_price_meter']
+        del obj['old_price_rahn']
+        del obj['old_price_rent']
+        del obj['old_price_rahnrent_val']
+        del obj['update_user_id']
+        del obj['old_price_dscr']
+        del obj['old_price_meter_dscr']
+        del obj['old_price_rahn_dscr']
+        del obj['old_price_rent_dscr']
+        del obj['old_price_rahnrent_val_dscr']
+        del obj['id']
 
         newObj.update(obj)
         kashano_new_list.append(newObj)
@@ -162,25 +258,37 @@ def get(request):
     update_count = {}
     start = request.GET.get('start')
     if start:
-        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        start = datetime.datetime.strptime(start, "%Y-%m-%d").date() - datetime.timedelta(days=1)
         end = datetime.datetime.strptime(request.GET.get('end'), "%Y-%m-%d").date()
 
         for setting in settings:
             Session = requests.session()
             Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+            new = 0
+            repeat = 0
+            update = 0
+
             for transaction in ast.literal_eval(setting.transactions):
                 for estate in ast.literal_eval(setting.estates):
-                    new = 0
-                    repeat = 0
-                    update = 0
+                    # new = 0
+                    # repeat = 0
+                    # update = 0
                     data = {'est_type': estate, 'deal_type': transaction}
-                    levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
+                    try:
+                        levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
+                    except requests.exceptions.RequestException as e:
+                        levelOne = ''
+                        print(e)
                     breakNum = 0
                     for page in range(1, 500000):
                         print(transaction, estate, page)
                         url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
                         data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
-                        levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
+                        try:
+                            levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
+                        except requests.exceptions.RequestException as e:
+                            levelTwo
+                            print(e)
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
                                 data = {'elead_id': ticket['elead_id']}
@@ -195,12 +303,10 @@ def get(request):
                                 dic['ctime'] = new_time
 
                                 if start <= new_time <= end:
+                                    print(dic['elead_id'])
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
                                         repeat += 1
-                                        # print('record exist')
-                                        # print(record[0].utime)
-                                        # print(dic['utime'])
                                         if record[0].utime != dic['utime']:
                                             update += 1
                                             print(record[0].elead_id, record[0].id)
@@ -244,8 +350,7 @@ def get(request):
                                                 viewable_owner_name=dic['viewable_owner_name'],
                                                 dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'],
                                                 pic_nums=dic['pic_nums'],
-                                                default_pic=dic['default_pic'],
-                                                is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
+                                                is_updates=dic['is_updates'],
                                                 water_share_amount=dic['water_share_amount'],
                                                 water_share_unit=dic['water_share_unit'],
                                                 water_share_inunit=dic['water_share_inunit'],
@@ -300,8 +405,7 @@ def get(request):
                                             stat=dic['stat'], tahvil_date=dic['tahvil_date'],
                                             viewable_owner_name=dic['viewable_owner_name'],
                                             dscr=dic['dscr'], javaz_sakht=dic['javaz_sakht'], pic_nums=dic['pic_nums'],
-                                            default_pic=dic['default_pic'],
-                                            is_updates=dic['is_updates'], edited_fields=dic['edited_fields'],
+                                            is_updates=dic['is_updates'],
                                             water_share_amount=dic['water_share_amount'],
                                             water_share_unit=dic['water_share_unit'],
                                             water_share_inunit=dic['water_share_inunit'], pickup_num=dic['pickup_num'],
@@ -330,7 +434,7 @@ def get(request):
                                         for item in dic['tasisat']:
                                             model.Tasisat(estate=newEstate, name=item).save()
                                 elif end < new_time:
-                                    print('a')
+                                    a = 20
                                 else:
                                     breakNum = 1
                                     break
@@ -339,10 +443,11 @@ def get(request):
                             break
                         if breakNum == 1:
                             break
-                    update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat-update}
+            update_count = {"new": new, "update": update, "repeat": repeat - update}
+            # update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat - update}
         return HttpResponse(json.dumps(update_count), 'application/json')
 
-    return render(request, 'get.html',)
+    return render(request, 'get.html', )
 
 
 @staff_member_required()
@@ -391,8 +496,9 @@ def kashano(request):
     records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
 
     Session = requests.session()
-    setting = model.Setting.objects.filter(name='kashano')
-    login = Session.post('http://www.kashano.ir/user/login', data={'user': setting[0].username, 'pass': setting[0].password})
+    setting = model.Setting.objects.filter(name='kashano')[0]
+    login = Session.post('http://www.kashano.ir/user/login',
+                         data={'user': setting.username, 'pass': setting.password})
     homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
     areas = []
     for item in homes.json():
@@ -404,7 +510,7 @@ def kashano(request):
                     areas.append([result['area_id'], result['text']])
     paginator = Paginator(records, 10)
     records = paginator.get_page(request.GET.get('page'))
-    print(jdatetime.datetime.now())
+
     return render(request, 'kashano.html', {'records': records, "areas": areas, "select": select, "times": times})
 
 
