@@ -496,7 +496,11 @@ def kashano(request):
     records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
 
     Session = requests.session()
-    setting = model.Setting.objects.filter(name='kashano')[0]
+    setting = model.Setting.objects.filter(name='kashano')
+    if not setting:
+        setting = {"username": "", "password": ""}
+    else:
+        setting = setting[0]
     login = Session.post('http://www.kashano.ir/user/login',
                          data={'user': setting.username, 'pass': setting.password})
     homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
