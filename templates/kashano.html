@@ -86,20 +86,20 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <div class="pagination">
+                    <div id="pagination" style="float: left; margin: 15px">
                         <span class="step-links">
                             {% if records.has_previous %}
-                                <a href="?page=1">&laquo; first</a>
-                                <a href="?page={{ records.previous_page_number }}">previous</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page=1">صفحه اول</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.previous_page_number }}">قبلی</a>
                             {% endif %}
 
                             <span class="current">
-                                Page {{ Generics.number }} of {{ Generics.paginator.num_pages }}.
+                                صفحه {{ records.number }} از {{ records.paginator.num_pages }}
                             </span>
 
                             {% if records.has_next %}
-                                <a href="?page={{ records.next_page_number }}">next</a>
-                                <a href="?page={{ records.paginator.num_pages }}">last &raquo;</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.next_page_number }}">بعدی</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.paginator.num_pages }}">صفحه آخر</a>
                             {% endif %}
                         </span>
                     </div>
@@ -174,7 +174,7 @@
                     <div class="form-group row">
                         <label for="format" class="col-sm-4 col-form-label"> نوع فایل :</label>
                         <div class="col-sm-8">
-                            <select name="format" id="format" class="form-control select2 allow-cancel"
+                            <select name="format" required id="format" class="form-control select2 allow-cancel"
                                     style="width: 200px">
                                 <option value="json"> json-file</option>
                                 <option value="xlsx"> xlsx-file</option>
@@ -379,9 +379,6 @@
                 $.get("/kashano/delete", {ids: ID});
             })
         })
-
-
-
 </script>
 <input type="hidden" value="{{select.deal_type.0}}" id="select_deal_type">
 <input type="hidden" value="{{select.est_type.0}}" id="select_est_type">
@@ -404,6 +401,10 @@
         $("#delete_status").val(delete_status).trigger('change');
         var download_time = $('#select_download_time').val();
         $("#download_time").val(download_time).trigger('change');
+        $("#format").val("xlsx").trigger('change');
+        $("#data-table_length").css({display:"none"});
+        var pagination = $("#pagination")
+        $("#data-table_wrapper > :last-child").html(pagination)
     });
 </script>
 

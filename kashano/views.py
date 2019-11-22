@@ -257,9 +257,10 @@ def get(request):
     settings = model.Setting.objects.filter()
     update_count = {}
     start = request.GET.get('start')
+    end = request.GET.get('end')
     if start:
         start = datetime.datetime.strptime(start, "%Y-%m-%d").date() - datetime.timedelta(days=1)
-        end = datetime.datetime.strptime(request.GET.get('end'), "%Y-%m-%d").date()
+        end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
 
         for setting in settings:
             Session = requests.session()
@@ -267,12 +268,8 @@ def get(request):
             new = 0
             repeat = 0
             update = 0
-
             for transaction in ast.literal_eval(setting.transactions):
                 for estate in ast.literal_eval(setting.estates):
-                    # new = 0
-                    # repeat = 0
-                    # update = 0
                     data = {'est_type': estate, 'deal_type': transaction}
                     try:
                         levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
@@ -287,7 +284,7 @@ def get(request):
                         try:
                             levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
                         except requests.exceptions.RequestException as e:
-                            levelTwo
+                            levelTwo = ''
                             print(e)
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
@@ -303,13 +300,11 @@ def get(request):
                                 dic['ctime'] = new_time
 
                                 if start <= new_time <= end:
-                                    print(dic['elead_id'])
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
                                         repeat += 1
                                         if record[0].utime != dic['utime']:
                                             update += 1
-                                            print(record[0].elead_id, record[0].id)
                                             record.update(
                                                 elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
                                                 phone2=dic['phone2'], est_address=dic['est_address'],
@@ -445,9 +440,11 @@ def get(request):
                             break
             update_count = {"new": new, "update": update, "repeat": repeat - update}
             # update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat - update}
-        return HttpResponse(json.dumps(update_count), 'application/json')
+        # return HttpResponse(json.dumps(update_count), 'application/json')
+    start = request.GET.get('start')
+    end = request.GET.get('end')
 
-    return render(request, 'get.html', )
+    return render(request, 'get.html', {"response": update_count, "start": start, "end": end})
 
 
 @staff_member_required()
@@ -576,12 +573,15 @@ def delete_record(request):
 def export_file(request):
     if request.GET.get('start'):
         start = request.GET.get('start')
+        start = datetime.datetime.strptime(start, "%Y-%m-%d").date() - datetime.timedelta(days=1)
     else:
-        start = jdatetime.date.today().togregorian() - jdatetime.timedelta(days=2650)
+        start = datetime.date.today() - jdatetime.timedelta(days=2650)
     if request.GET.get('end'):
         end = request.GET.get('end')
+        end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+
     else:
-        end = jdatetime.date.today().togregorian() + jdatetime.timedelta(days=10)
+        end = datetime.date.today() + jdatetime.timedelta(days=10)
     filter_names = ('download_status', 'est_type', 'elead_id', 'name', 'area_id', 'delete_status')
     filter_clauses = [Q(**{filter: request.GET[filter]})
                       for filter in filter_names
