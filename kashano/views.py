@@ -32,8 +32,8 @@ def data_import(request):
     file = open('kashano/kashano.json')
     for dic in file:
         dic = json.loads(dic)
-        new_time = change_date(dic['ctime'])
-        dic['ctime'] = new_time
+        new_ctime = change_date(dic['ctime'])
+        dic['ctime'] = new_ctime
         record = model.Estate.objects.filter(elead_id=dic['elead_id'])
         if record:
             print('hast')
@@ -274,8 +274,9 @@ def get(request):
                     try:
                         levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
                     except requests.exceptions.RequestException as e:
-                        levelOne = ''
-                        print(e)
+                        start = request.GET.get('start')
+                        end = request.GET.get('end')
+                        return render(request, 'get.html', {"response": e, "start": start, "end": end})
                     breakNum = 0
                     for page in range(1, 500000):
                         print(transaction, estate, page)
@@ -284,22 +285,24 @@ def get(request):
                         try:
                             levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
                         except requests.exceptions.RequestException as e:
-                            levelTwo = ''
-                            print(e)
+                            start = request.GET.get('start')
+                            end = request.GET.get('end')
+                            return render(request, 'get.html', {"response": e, "start": start, "end": end})
+
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
-                                data = {'elead_id': ticket['elead_id']}
-                                levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
-                                while not levelThree.text:
+                                new_ctime = change_date(ticket['ctime'])
+
+                                if start <= new_ctime <= end:
+                                    data = {'elead_id': ticket['elead_id']}
                                     levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
-                                dic = levelThree.json()
+                                    while not levelThree.text:
+                                        levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
+                                    dic = levelThree.json()
+                                    dic['elead_id'] = ticket['elead_id']
+                                    dic['ctime'] = new_ctime
+                                    print(dic['elead_id'])
 
-                                new_time = change_date(dic['ctime'])
-
-                                dic['elead_id'] = ticket['elead_id']
-                                dic['ctime'] = new_time
-
-                                if start <= new_time <= end:
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
                                         repeat += 1
@@ -428,16 +431,16 @@ def get(request):
                                             model.Facilities(estate=newEstate, name=item).save()
                                         for item in dic['tasisat']:
                                             model.Tasisat(estate=newEstate, name=item).save()
-                                elif end < new_time:
+                                elif end < new_ctime:
                                     a = 20
                                 else:
                                     breakNum = 1
                                     break
-
                         else:
                             break
                         if breakNum == 1:
                             break
+
             update_count = {"new": new, "update": update, "repeat": repeat - update}
             # update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat - update}
         # return HttpResponse(json.dumps(update_count), 'application/json')
@@ -573,7 +576,7 @@ def delete_record(request):
 def export_file(request):
     if request.GET.get('start'):
         start = request.GET.get('start')
-        start = datetime.datetime.strptime(start, "%Y-%m-%d").date() - datetime.timedelta(days=1)
+        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
     else:
         start = datetime.date.today() - jdatetime.timedelta(days=2650)
     if request.GET.get('end'):

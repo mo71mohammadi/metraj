@@ -90,7 +90,7 @@
                         <span class="step-links">
                             {% if records.has_previous %}
                                 <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page=1">صفحه اول</a>
-                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.previous_page_number }}">قبلی</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.previous_page_number }}&area_id={{select.area_id.0}}">قبلی</a>
                             {% endif %}
 
                             <span class="current">
@@ -98,7 +98,7 @@
                             </span>
 
                             {% if records.has_next %}
-                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.next_page_number }}">بعدی</a>
+                                <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.next_page_number }}&area_id={{select.area_id.0}}">بعدی</a>
                                 <a style="border: 1px solid #9999; padding: 5px;border-radius: 15px;" href="?page={{ records.paginator.num_pages }}">صفحه آخر</a>
                             {% endif %}
                         </span>
@@ -380,7 +380,7 @@
             })
         })
 </script>
-<input type="hidden" value="{{select.deal_type.0}}" id="select_deal_type">
+<input type="hidden" value="{{select}}" id="select_deal_type">
 <input type="hidden" value="{{select.est_type.0}}" id="select_est_type">
 <input type="hidden" value="{{select.area_id.0}}" id="select_area_id">
 <input type="hidden" value="{{select.download_status.0}}" id="select_download_status">
@@ -403,8 +403,8 @@
         $("#download_time").val(download_time).trigger('change');
         $("#format").val("xlsx").trigger('change');
         $("#data-table_length").css({display:"none"});
-        var pagination = $("#pagination")
-        $("#data-table_wrapper > :last-child").html(pagination)
+        var pagination = $("#pagination");
+        $("#data-table_wrapper > :last-child").html(pagination);
     });
 </script>
 
