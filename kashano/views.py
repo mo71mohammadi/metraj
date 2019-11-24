@@ -259,8 +259,8 @@ def get(request):
     start = request.GET.get('start')
     end = request.GET.get('end')
     if start:
-        start = datetime.datetime.strptime(start, "%Y-%m-%d").date() - datetime.timedelta(days=1)
-        end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        end = datetime.datetime.strptime(end, "%Y-%m-%d").date() + datetime.timedelta(days=1)
 
         for setting in settings:
             Session = requests.session()
@@ -279,7 +279,7 @@ def get(request):
                         return render(request, 'get.html', {"response": e, "start": start, "end": end})
                     breakNum = 0
                     for page in range(1, 500000):
-                        print(transaction, estate, page)
+                        # print(transaction, estate, page)
                         url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
                         data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
                         try:
@@ -292,6 +292,8 @@ def get(request):
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
                                 new_ctime = change_date(ticket['ctime'])
+                                print("ticket", ticket['ctime'])
+                                # print(start, end, new_ctime)
 
                                 if start <= new_ctime <= end:
                                     data = {'elead_id': ticket['elead_id']}
@@ -299,9 +301,12 @@ def get(request):
                                     while not levelThree.text:
                                         levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
                                     dic = levelThree.json()
+                                    print(dic['ctime'])
                                     dic['elead_id'] = ticket['elead_id']
                                     dic['ctime'] = new_ctime
-                                    print(dic['elead_id'])
+                                    print("sasasa", dic['ctime'])
+
+                                    # print(dic['elead_id'])
 
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
@@ -576,12 +581,17 @@ def delete_record(request):
 def export_file(request):
     if request.GET.get('start'):
         start = request.GET.get('start')
-        start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        # start = change_date(start)
+        # start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        print(start)
     else:
         start = datetime.date.today() - jdatetime.timedelta(days=2650)
     if request.GET.get('end'):
         end = request.GET.get('end')
-        end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+        # start = change_date(end)
+
+        # end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+        print(end)
 
     else:
         end = datetime.date.today() + jdatetime.timedelta(days=10)
