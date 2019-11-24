@@ -127,7 +127,6 @@ def change_data(new_list):
         mobiles = []
         homes = []
         for phone in list(set(phones)):
-            print(phone)
             mobile = re.search(r'''^[9]\d{9}|^[0]\d{10}''', phone)
             if mobile:
                 mobiles.append(mobile[0])
@@ -168,7 +167,6 @@ def change_data(new_list):
         del obj['size_subs']
         newObj['age'] = obj['age']
         del obj['age']
-        newObj['front_length'] = ''
         newObj['direction'] = obj['direction']
         del obj['direction']
         newObj['rooms_count'] = obj['rooms']
@@ -204,6 +202,8 @@ def change_data(new_list):
         del obj['ctime']
         newObj['updated_at'] = obj['utime']
         del obj['utime']
+        newObj['front_length'] = obj['bar']
+        del obj['bar']
         # newObj['area_kashano'] = obj['area']
         del obj['area']
         del obj['delete_status']
@@ -253,14 +253,15 @@ def home(request):
 @login_required()
 def get(request):
     download_time = jdatetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+    internalDB = []
     settings = model.Setting.objects.filter()
     update_count = {}
     start = request.GET.get('start')
     end = request.GET.get('end')
     if start:
         start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
-        end = datetime.datetime.strptime(end, "%Y-%m-%d").date() + datetime.timedelta(days=1)
+        end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+        print(start, end)
 
         for setting in settings:
             Session = requests.session()
@@ -268,6 +269,7 @@ def get(request):
             new = 0
             repeat = 0
             update = 0
+            internalRepeat = 0
             for transaction in ast.literal_eval(setting.transactions):
                 for estate in ast.literal_eval(setting.estates):
                     data = {'est_type': estate, 'deal_type': transaction}
@@ -279,7 +281,7 @@ def get(request):
                         return render(request, 'get.html', {"response": e, "start": start, "end": end})
                     breakNum = 0
                     for page in range(1, 500000):
-                        # print(transaction, estate, page)
+                        print(transaction, estate, page)
                         url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
                         data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
                         try:
@@ -292,22 +294,21 @@ def get(request):
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
                                 new_ctime = change_date(ticket['ctime'])
-                                print("ticket", ticket['ctime'])
                                 # print(start, end, new_ctime)
 
                                 if start <= new_ctime <= end:
+                                    if ticket['elead_id'] in internalDB:
+                                        internalRepeat += 1
+                                    else:
+                                        internalDB.append(ticket['elead_id'])
                                     data = {'elead_id': ticket['elead_id']}
                                     levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
                                     while not levelThree.text:
                                         levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
                                     dic = levelThree.json()
-                                    print(dic['ctime'])
                                     dic['elead_id'] = ticket['elead_id']
                                     dic['ctime'] = new_ctime
-                                    print("sasasa", dic['ctime'])
-
-                                    # print(dic['elead_id'])
-
+                                    print(dic['ctime'], dic['elead_id'])
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
                                         repeat += 1
@@ -446,7 +447,7 @@ def get(request):
                         if breakNum == 1:
                             break
 
-            update_count = {"new": new, "update": update, "repeat": repeat - update}
+            update_count = {"new": new, "update": update, "repeat": repeat - update - internalRepeat}
             # update_count[transaction + ' ' + estate] = {"new": new, "update": update, "repeat": repeat - update}
         # return HttpResponse(json.dumps(update_count), 'application/json')
     start = request.GET.get('start')
