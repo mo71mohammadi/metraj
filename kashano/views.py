@@ -265,14 +265,18 @@ def get(request):
 
         for setting in settings:
             Session = requests.session()
-            Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+            try:
+                Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+            except:
+                return render(request, 'get.html', {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید", "start": start, "end": end})
+
             new = 0
             repeat = 0
             update = 0
             internalRepeat = 0
             for transaction in ast.literal_eval(setting.transactions):
                 for estate in ast.literal_eval(setting.estates):
-                    data = {'est_type': estate, 'deal_type': transaction}
+                    data = {'est_type': estate, 'deal_type': transaction, 'ctrl': 'listing'}
                     try:
                         levelOne = Session.post(url='http://www.kashano.ir/search', data=data, allow_redirects=True)
                     except requests.exceptions.RequestException as e:
@@ -283,7 +287,7 @@ def get(request):
                     for page in range(1, 500000):
                         print(transaction, estate, page)
                         url = 'http://www.kashano.ir/search/listings/{}'.format(str(page))
-                        data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'search'}
+                        data = {'sort_by': 'ctime', 'sort_direction': 'DESC', 'ctrl': 'listing'}
                         try:
                             levelTwo = Session.post(url=url, data=data, cookies=levelOne.cookies)
                         except requests.exceptions.RequestException as e:
@@ -295,7 +299,6 @@ def get(request):
                             for ticket in levelTwo.json()['items']:
                                 new_ctime = change_date(ticket['ctime'])
                                 # print(start, end, new_ctime)
-
                                 if start <= new_ctime <= end:
                                     if ticket['elead_id'] in internalDB:
                                         internalRepeat += 1
@@ -501,15 +504,20 @@ def kashano(request):
     filter_clauses.append(Q(ctime__range=[start, end]))
     records = model.Estate.objects.filter(reduce(operator.and_, filter_clauses))
 
-    Session = requests.session()
-    setting = model.Setting.objects.filter(name='kashano')
-    if not setting:
-        setting = {"username": "", "password": ""}
-    else:
-        setting = setting[0]
-    login = Session.post('http://www.kashano.ir/user/login',
-                         data={'user': setting.username, 'pass': setting.password})
-    homes = Session.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"}, cookies=login.cookies)
+    # setting = model.Setting.objects.filter(name='kashano')
+    #
+    # if setting:
+    #     setting = setting[0]
+    #     data = {'user': setting.username, 'pass': setting.password}
+    # else:
+    #     setting = {"username": "", "password": ""}
+    #     data = {'user': setting['username'], 'pass': setting['password']}
+    # Session = requests.session()
+    # try:
+    #     login = Session.post('http://www.kashano.ir/user/login', data=data)
+    # except:
+    #     return render(request, 'kashano.html', )
+    homes = requests.post(url='http://www.kashano.ir/pub/full_area_names', data={"city_id": "1"})
     areas = []
     for item in homes.json():
         if not (item['area_id'] in areas):
