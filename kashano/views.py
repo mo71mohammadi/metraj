@@ -315,7 +315,9 @@ def get(request):
                                     record = model.Estate.objects.filter(elead_id=ticket['elead_id'])
                                     if record:
                                         repeat += 1
-                                        if record[0].utime != dic['utime']:
+                                        print(type(record[0].ctime), type(dic['ctime']))
+                                        print(record[0].ctime != dic['ctime'])
+                                        if record[0].utime != dic['utime'] or record[0].ctime != dic['ctime']:
                                             update += 1
                                             record.update(
                                                 elead_id=dic['elead_id'], name=dic['name'], phone=dic['phone'],
