@@ -168,7 +168,6 @@ def change_data(new_list):
         newObj['age'] = obj['age']
         del obj['age']
         newObj['front_length'] = obj['bar']
-        del obj['bar']
         newObj['direction'] = obj['direction']
         del obj['direction']
         newObj['rooms_count'] = obj['rooms']
@@ -258,7 +257,7 @@ def get(request):
     update_count = {}
     start = request.GET.get('start')
     end = request.GET.get('end')
-    if start:
+    if start and end:
         start = datetime.datetime.strptime(start, "%Y-%m-%d").date()
         end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
         print(start, end)
@@ -266,9 +265,13 @@ def get(request):
         for setting in settings:
             Session = requests.session()
             try:
-                Session.post('http://www.kashano.ir/user/login', data={'user': setting.username, 'pass': setting.password})
+                Session.post('http://www.kashano.ir/user/login',
+                             data={'user': setting.username, 'pass': setting.password})
             except:
-                return render(request, 'get.html', {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید", "start": start, "end": end})
+                start = request.GET.get('start')
+                end = request.GET.get('end')
+                return render(request, 'get.html',
+                              {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید", "start": start, "end": end})
 
             new = 0
             repeat = 0
@@ -282,7 +285,9 @@ def get(request):
                     except requests.exceptions.RequestException as e:
                         start = request.GET.get('start')
                         end = request.GET.get('end')
-                        return render(request, 'get.html', {"response": e, "start": start, "end": end})
+                        return render(request, 'get.html',
+                                      {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید", "start": start,
+                                       "end": end})
                     breakNum = 0
                     for page in range(1, 500000):
                         print(transaction, estate, page)
@@ -293,7 +298,9 @@ def get(request):
                         except requests.exceptions.RequestException as e:
                             start = request.GET.get('start')
                             end = request.GET.get('end')
-                            return render(request, 'get.html', {"response": e, "start": start, "end": end})
+                            return render(request, 'get.html',
+                                          {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید", "start": start,
+                                           "end": end})
 
                         if levelTwo.json()['items']:
                             for ticket in levelTwo.json()['items']:
@@ -305,9 +312,18 @@ def get(request):
                                     else:
                                         internalDB.append(ticket['elead_id'])
                                     data = {'elead_id': ticket['elead_id']}
-                                    levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
-                                    while not levelThree.text:
+                                    try:
                                         levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
+                                        while not levelThree.text:
+                                            levelThree = Session.post(url='http://www.kashano.ir/est/owner_info', data=data)
+                                    except:
+                                        start = request.GET.get('start')
+                                        end = request.GET.get('end')
+                                        return render(request, 'get.html',
+                                                      {"response": "عدم دسترسی به اینترنت لطفا مجددا تلاش کنید",
+                                                       "start": start,
+                                                       "end": end})
+
                                     dic = levelThree.json()
                                     dic['elead_id'] = ticket['elead_id']
                                     dic['ctime'] = new_ctime
