@@ -1,24 +1,195 @@
-Python 3.7.3
+# 1. Server Initial Setup
 
-## require package
-    Django 2.2.4
-    jdatetime
-    mysqlclient
-    requests
+Set server timezone to Tehran:
+```
+sudo dpkg-reconfigure tzdata
+```
+Upgrade server:
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+`Install the required tools`:
+```
+sudo apt install git unzip curl -y
+```
+# 2. install mysql-server:
+```
+sudo apt-get install mysql-server -y
+```
 
-setup python env:
-    cPanel --->  software section ---> Setup python app	: python version 3.7, select project dir
-    modules (package) ---> Django & jdatetime & mysqlclient & requests
-    in Terminal run “source /home/fsnir/virtualenv/metraj_metraj__data__django/3.7/bin/activate”
-    run command “python manage.py makemigrations” and “python manage.py migrate”
-    edit “passenger_wsgi.py” in dir project and change to ---> “from myproject.wsgi 	import application”
-    Edit setting.py:
-    ALLOWED_HOSTS = [] ---> ALLOWED_HOSTS = ['fsn.ir']
-    DEBUG = True ---> DEBUG = FALSE
-    set DATABSES section and set NAME (database name) & USER & PASSWORD
-    add:
-    MEDIA_URL = '/media'
-    STATICFILES_DIRS = [BASE_DIR+"/assets"]
-    STATIC_ROOT = '/home/cityart2/public_html/static'
-    MEDIA_ROOT = '/home/cityart2/public_html/media'
-    Terminal (in dir project) run:  “python manage.py collectstatic”
+`create DataBase:`
+```
+sudo mysql -u root -p
+CREATE DATABASE metraj;
+exit;
+```
+`set Charset:`
+```
+nano .my.cnf
+```
+add:
+```
+[client]
+user=root
+password=""
+```
+Ctrl+X, type y to save the file
+
+run Command:
+```
+sudo mysql --database=metraj -B -N -e "SHOW TABLES" | awk '{print "SET foreign_key_checks = 0; ALTER TABLE", $1, "CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci; SET foreign_key_checks = 1; "}' | sudo mysql --database=metraj
+sudo mysql
+ALTER DATABASE metraj CHARACTER SET utf8 COLLATE utf8_general_ci;
+exit;
+rm .my.cnf
+```
+
+`SET root PASSWORD:`
+```
+sudo mysql -u root -p
+USE mysql;
+UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+FLUSH PRIVILEGES;
+exit;
+sudo mysql_secure_installation 
+```
+type y, type 0, type New pass & Re-enter new password;
+ 
+Do you wish to continue with the password provided? type y; 
+
+Remove anonymous users? type n; 
+
+Disallow root login remotely? type n; 
+
+Remove test database and access to it? type n; 
+
+Reload privilege tables now? type y
+
+# 3. Install conda:
+```
+curl -o Miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda.sh
+```
+press INTER until this message show:
+
+Do you accept the license terms? type yes
+
+Press ENTER to confirm the location
+
+Do you wish the installer to initialize Miniconda3 by running conda init? type yes AND close Terminal
+
+`install required Package:`
+
+open terminal and run Command:
+```
+conda activate
+pip install django jdatetime openpyxl
+```
+install mysqlclient:
+```
+conda install -c bioconda mysqlclient -y
+```
+# 4. Add ssh-keys and clone repositories
+`Create a key for root:`
+```
+ssh-keygen -t rsa
+cat .ssh/id_rsa.pub
+
+mkdir project
+cd project/
+git clone ssh://git@ssh.gitlab.fxpart.com:1222/metraj/products/metraj_data_django.git
+```
+Are you sure you want to continue connecting? type yes;
+
+# 5. Project Settings
+
+```
+cd metraj_data_django
+unzip static.zip
+cd metraj
+mv settings.example.py settings.py
+nano settings.py
+```
+in section DATABASE change password
+
+```
+cd ..
+cd kashano 
+mv migrations.example migrations
+cd ..
+python manage.py makemigrations
+python manage.py migrate
+```
+
+`set panel user & pass:`
+```
+python manage.py createsuperuser
+```
+
+`set auto run file:`
+```
+sudo touch autorun.sh
+sudo nano autorun.sh
+```
+add (change $USER):
+```
+#!/bin/sh -
+
+activate () {
+	. /home/$USER/miniconda3/bin/activate
+}
+activate
+
+cd /home/$USER/project/metraj_data_django
+python manage.py runserver
+```
+Ctrl+X, type y to save the file
+```
+cd /usr/lib/systemd
+sudo mkdir system
+cd system
+sudo nano metraj.service
+```
+add (change $USER):
+```
+[Unit]
+Description=Metraj Scraping
+
+[Service]
+Type=simple
+User=$USER
+ExecStart=/home/$USER/project/metraj_data_django/autorun.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+Ctrl+X, type y to save the file
+```
+systemctl enable metraj
+sudo systemctl start metraj
+
+```
+
+# 6. install nginx
+```
+sudo apt install nginx -y
+sudo nano /etc/nginx/nginx.conf
+```
+add this section to http section: 
+```
+server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        proxy_pass "http://127.0.0.1:8000";
+    }
+}
+```
+
+`run and reload nginx:`
+```
+sudo systemctl start nginx
+sudo systemctl reload nginx
+```
